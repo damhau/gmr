@@ -33,7 +33,7 @@
   .station .icon{font-size:38px;text-anchor:middle;filter:grayscale(1);opacity:.45;transition:.4s}
   .station.done .icon{filter:none;opacity:1}
   .station.pressing .disc{transform-box:fill-box;transform-origin:center;transform:scale(.92)}
-  .tick text{font-size:16px;fill:var(--ink);opacity:.55;text-anchor:middle}
+  .tick text{font-size:15px;fill:var(--ink);opacity:.5;text-anchor:middle}
   .rider{transition:transform .9s cubic-bezier(.4,1.35,.6,1)}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
   .rider .body{animation:bob 1.4s ease-in-out infinite}
@@ -73,7 +73,7 @@
   <p>Quatre étapes, puis le drapeau. Tu y arrives avant <span id="goalTxt">7h30</span>&nbsp;?</p>
 </header>
 
-<svg class="trail" viewBox="0 0 1000 330" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Le sentier du matin">
+<svg class="trail" viewBox="0 0 1000 338" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Le sentier du matin">
   <g transform="translate(930,60)">
     <g class="rays" fill="var(--sun)">
       <path d="M0 -70 L8 -40 L-8 -40 Z"/><path d="M0 70 L8 40 L-8 40 Z"/><path d="M70 0 L40 8 L40 -8 Z"/><path d="M-70 0 L-40 8 L-40 -8 Z"/>
@@ -86,7 +86,7 @@
     <ellipse cx="150" cy="60" rx="46" ry="18"/><ellipse cx="180" cy="50" rx="30" ry="18"/>
     <ellipse cx="560" cy="45" rx="40" ry="16"/><ellipse cx="585" cy="36" rx="26" ry="16"/>
   </g>
-  <rect x="0" y="250" width="1000" height="80" fill="var(--grass)"/>
+  <rect x="0" y="250" width="1000" height="88" fill="var(--grass)"/>
   <path id="road" d="M60 230 C 200 150, 260 150, 320 220 S 480 300, 560 210 S 720 130, 800 210 S 900 260, 940 200"
         fill="none" stroke="var(--path)" stroke-width="18" stroke-linecap="round"/>
   <path id="prog" d="M60 230 C 200 150, 260 150, 320 220 S 480 300, 560 210 S 720 130, 800 210 S 900 260, 940 200"
@@ -134,8 +134,8 @@ const $=id=>document.getElementById(id);
 const NS="http://www.w3.org/2000/svg";
 
 // clock ticks under each stop + the flag; texts filled from settings (targets/goal)
-const tick=(id,x)=>{const t=document.createElementNS(NS,"text");t.id="tk-"+id;t.setAttribute("x",x);t.setAttribute("y",290);$("ticks").appendChild(t);};
-TASKS.forEach(t=>tick(t.id,pt(t.at).x)); tick("goal",940);
+const tick=(id,x,y)=>{const t=document.createElementNS(NS,"text");t.id="tk-"+id;t.setAttribute("x",x);t.setAttribute("y",y);$("ticks").appendChild(t);};
+TASKS.forEach(t=>tick(t.id,pt(t.at).x,330)); tick("goal",940,288);
 
 // stations: tap = fait, appui long (700 ms) = annuler
 const S=$("stations"); let state={tasks:{}};
@@ -145,9 +145,9 @@ TASKS.forEach(t=>{
   g.setAttribute("class","station"); g.id="st-"+t.id;
   g.innerHTML=`<circle class="disc" cx="${p.x}" cy="${p.y}" r="34"/>
     <text class="icon" x="${p.x}" y="${p.y+14}">${t.icon}</text>
-    <text class="lbl" x="${p.x}" y="${p.y+64}">${t.name}</text>
-    <text class="tm" x="${p.x}" y="${p.y+86}"></text>
-    <circle class="hit" cx="${p.x}" cy="${p.y+40}" r="60"/>`;
+    <text class="lbl" x="${p.x}" y="288">${t.name}</text>
+    <text class="tm" x="${p.x}" y="310"></text>
+    <circle class="hit" cx="${p.x}" cy="${(p.y+300)/2}" r="70"/>`;
   let timer=null, long=false;
   const down=e=>{e.preventDefault();long=false;g.classList.add("pressing");
     timer=setTimeout(()=>{long=true;g.classList.remove("pressing");if(state.tasks[t.id]?.state!=="todo")send(t.id,"undo");},700);};
@@ -165,7 +165,8 @@ let wasComplete=null;
 function renderToday(t){
   state=t;
   const n=t.done;
-  let f=0; for(const task of TASKS) if(t.tasks[task.id].state==="done") f=task.at;
+  let f=0; for(const task of TASKS) if(t.tasks[task.id].state==="done") f=Math.min(task.at+.1,.97);
+  if(t.complete) f=1;
   const p=pt(f);
   $("rider").style.transform=`translate(${p.x}px,${p.y}px)`;
   $("prog").style.strokeDasharray=`${f} 1`;
