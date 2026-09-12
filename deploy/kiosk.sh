@@ -18,9 +18,10 @@ for i in $(seq 1 60); do
   curl -fsS -m 2 "$URL/health" >/dev/null 2>&1 && break
   sleep 1
 done
-# Let the compositor settle (output mode/rotation applied by kanshi or wlr-randr). Chromium started while the
-# output is being reconfigured under Wayland ends up with a window that never paints (grey screen at boot).
-sleep "${GMR_KIOSK_DELAY:-20}"
+# Wait for the network to be up (Chromium's network service crashes at boot if it starts while interfaces move)
+for i in $(seq 1 "${GMR_KIOSK_NET_WAIT:-30}"); do ip route 2>/dev/null | grep -q "^default" && break; sleep 1; done
+# Let the compositor settle (output mode/rotation applied by kanshi or wlr-randr)
+sleep "${GMR_KIOSK_DELAY:-10}"
 command -v wlr-randr >/dev/null && wlr-randr >>"$LOGF" 2>&1
 
 FLAGS=(
@@ -42,9 +43,25 @@ if [ "${1:-}" = "--once" ]; then
   echo "launch $(date '+%T') $BROWSER" >>"$LOGF"
   exec "$BROWSER" "${FLAGS[@]}" >>"$LOGF" 2>&1
 fi
+# Watchdog: the page keeps a live SSE stream to the server from 127.0.0.1. No local stream = page not loaded
+# (e.g. Chromium's network service crashed during the first load -> empty window). Then relaunch the browser.
+local_streams(){ curl -fsS -m 3 "$URL/api/kiosk" 2>/dev/null | grep -o '"local_streams": *[0-9]*' | grep -o '[0-9]*$'; }
 while true; do
   echo "launch $(date '+%T') $BROWSER" >>"$LOGF"
-  "$BROWSER" "${FLAGS[@]}" >>"$LOGF" 2>&1
-  echo "browser exited rc=$? $(date '+%T')" >>"$LOGF"
+  "$BROWSER" "${FLAGS[@]}" >>"$LOGF" 2>&1 &
+  BPID=$!
+  loaded=0; misses=0; t=0
+  while kill -0 "$BPID" 2>/dev/null; do
+    sleep 5; t=$((t+5))
+    n=$(local_streams); n=${n:-0}
+    if [ "$n" -ge 1 ]; then loaded=1; misses=0
+    elif [ "$loaded" = 0 ] && [ "$t" -ge "${GMR_KIOSK_LOAD_TIMEOUT:-45}" ]; then
+      echo "watchdog $(date '+%T'): page not loaded after ${t}s, relaunching browser" >>"$LOGF"; kill "$BPID"; break
+    elif [ "$loaded" = 1 ]; then
+      misses=$((misses+1))
+      if [ "$misses" -ge 12 ]; then echo "watchdog $(date '+%T'): page stream gone for 60s, relaunching browser" >>"$LOGF"; kill "$BPID"; break; fi
+    fi
+  done
+  wait "$BPID" 2>/dev/null; echo "browser exited rc=$? $(date '+%T')" >>"$LOGF"
   sleep 2
 done

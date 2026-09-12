@@ -101,7 +101,7 @@ NAME_ALIASES = {
 
 
 # --- Server-Sent Events: one queue per connected browser -------------------------
-_subs, _subs_lock = set(), threading.Lock()
+_subs, _subs_lock = {}, threading.Lock()   # queue -> client ip
 
 
 def notify(kind: str, data=None):
@@ -540,7 +540,7 @@ class Handler(BaseHTTPRequestHandler):
     def stream(self):
         q = queue.Queue(maxsize=64)
         with _subs_lock:
-            _subs.add(q)
+            _subs[q] = self.client_address[0]
         try:
             self.send_response(200)
             self.send_header("Content-Type", "text/event-stream; charset=utf-8")
@@ -561,7 +561,7 @@ class Handler(BaseHTTPRequestHandler):
             pass
         finally:
             with _subs_lock:
-                _subs.discard(q)
+                _subs.pop(q, None)
 
     def do_GET(self):
         u = urlparse(self.path)
@@ -603,6 +603,10 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(settings())
         if u.path == "/api/version":
             return self.send_json(api_version())
+        if u.path == "/api/kiosk":   # used by deploy/kiosk.sh as a "page really loaded" check
+            with _subs_lock:
+                ips = list(_subs.values())
+            return self.send_json({"streams": len(ips), "local_streams": sum(1 for ip in ips if ip in ("127.0.0.1", "::1"))})
         if u.path.startswith("/static/"):
             target = (STATIC / u.path[len("/static/"):]).resolve()
             if STATIC.resolve() not in target.parents:
