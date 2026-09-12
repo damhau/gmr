@@ -14,6 +14,9 @@ for i in $(seq 1 60); do
   curl -fsS -m 2 "$URL/health" >/dev/null 2>&1 && break
   sleep 1
 done
+# Let the compositor settle (output mode/rotation applied by kanshi or wlr-randr). Chromium started while the
+# output is being reconfigured under Wayland ends up with a window that never paints (grey screen at boot).
+sleep "${GMR_KIOSK_DELAY:-8}"
 
 FLAGS=(
   --kiosk "$URL"
