@@ -90,9 +90,9 @@
   </g>
   <g id="deco"></g>
   <rect x="0" y="250" width="1000" height="88" fill="var(--grass)"/>
-  <path id="road" d="M60 230 C 200 150, 260 150, 320 220 S 480 300, 560 210 S 720 130, 800 210 S 900 260, 940 200"
+  <path id="road" d="M60 230 C 200 150, 260 150, 320 218 S 480 258, 560 206 S 720 130, 800 208 S 900 246, 940 200"
         fill="none" stroke="var(--path)" stroke-width="18" stroke-linecap="round"/>
-  <path id="prog" d="M60 230 C 200 150, 260 150, 320 220 S 480 300, 560 210 S 720 130, 800 210 S 900 260, 940 200"
+  <path id="prog" d="M60 230 C 200 150, 260 150, 320 218 S 480 258, 560 206 S 720 130, 800 208 S 900 246, 940 200"
         fill="none" stroke="var(--path-done)" stroke-width="18" stroke-linecap="round" pathLength="1"
         stroke-dasharray="0 1" style="transition:stroke-dasharray .9s"/>
   <g transform="translate(940,200)">
@@ -195,7 +195,7 @@ function renderToday(t){
   state=t;
   const n=t.done;
   let f=0; for(const task of TASKS) if(t.tasks[task.id].state==="done") f=Math.min(task.at+.1,.97);
-  if(t.complete) f=1;
+  if(t.complete) f=.93;   // just before the flag pole, fully on screen
   const p=pt(f);
   $("rider").style.transform=`translate(${p.x}px,${p.y}px)`;
   $("prog").style.strokeDasharray=`${f} 1`;

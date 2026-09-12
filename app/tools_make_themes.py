@@ -11,6 +11,8 @@ Theme format (all keys optional except name):
   clouds                 true/false
   decor                  [{"emoji":"⭐","x":120,"y":50,"size":22}, {"circle":1,"x":..,"y":..,"r":..,"fill":".."},
                           {"rect":1,"x":..,"y":..,"w":..,"h":..,"fill":".."}]   (SVG coords, 1000x338 scene, sky is y<250)
+                         Free spots: sky y<110 anywhere; on the ground, x~220 or x~700 with y=246 (the road is high there).
+                         Stations sit at x~90, 320, 560, 800 (discs y 170-255, labels y 266-335); avoid them.
   confetti               emoji list for the celebration
   rider                  SVG fragment drawn in an 80x80 box, facing right, feet at y~76; placed on the trail
 """
@@ -46,7 +48,7 @@ THEMES = {
             "win": "Arrivée à {time}, avant {goal} ! 🎉 Même Dragon est impressionnée !", "late": "Arrivée à {time}. Demain, on bat l'Âne avant {goal} ?"},
   "icons": {"wake": "🌅", "clothes": "🧥", "breakfast": "🥞", "teeth": "🪥"},
   "sky": {"type": "sun"}, "clouds": True, "confetti": ["🧅", "🐸", "🌿", "🎉", "💚"],
-  "decor": [{"emoji": "🌳", "x": 120, "y": 240, "size": 44}, {"emoji": "🌳", "x": 880, "y": 236, "size": 36}, {"emoji": "🐸", "x": 700, "y": 244, "size": 22}],
+  "decor": [{"emoji": "🌳", "x": 220, "y": 246, "size": 44}, {"emoji": "🐸", "x": 700, "y": 246, "size": 26}, {"emoji": "🦋", "x": 420, "y": 110, "size": 22}],
   "rider": SHADOW + '''<rect x="24" y="58" width="10" height="20" rx="4" fill="#4A2E14"/><rect x="42" y="58" width="10" height="20" rx="4" fill="#4A2E14"/>
 <path d="M18 40 h40 l5 22 h-50 z" fill="#8B5A2B"/><rect x="30" y="40" width="16" height="22" fill="#F1E3B4"/>
 <ellipse cx="38" cy="26" rx="18" ry="16" fill="#8DC63F"/>
@@ -67,7 +69,7 @@ THEMES = {
   "decor": [{"circle": 1, "x": 90, "y": 40, "r": 2, "fill": "#fff"}, {"circle": 1, "x": 210, "y": 90, "r": 1.5, "fill": "#fff"}, {"circle": 1, "x": 330, "y": 30, "r": 2.2, "fill": "#fff"},
             {"circle": 1, "x": 480, "y": 70, "r": 1.6, "fill": "#fff"}, {"circle": 1, "x": 600, "y": 25, "r": 2, "fill": "#fff"}, {"circle": 1, "x": 720, "y": 95, "r": 1.4, "fill": "#fff"},
             {"circle": 1, "x": 810, "y": 40, "r": 2.4, "fill": "#fff"}, {"circle": 1, "x": 160, "y": 140, "r": 1.3, "fill": "#fff"}, {"circle": 1, "x": 560, "y": 130, "r": 1.8, "fill": "#fff"},
-            {"emoji": "🏰", "x": 520, "y": 200, "size": 64}, {"emoji": "🦉", "x": 250, "y": 120, "size": 26}],
+            {"emoji": "🏰", "x": 700, "y": 118, "size": 64}, {"emoji": "🦉", "x": 250, "y": 118, "size": 26}],
   "rider": SHADOW + '''<line x1="4" y1="64" x2="66" y2="44" stroke="#8B5A2B" stroke-width="4" stroke-linecap="round"/>
 <path d="M8 62 L-4 72 M9 65 L0 78 M12 66 L6 78 M6 60 L-8 66" stroke="#C9A24A" stroke-width="3" stroke-linecap="round"/>
 <path d="M28 30 l-9 28 h30 l-7 -28 z" fill="#1F1F2E"/>
@@ -86,7 +88,7 @@ THEMES = {
   "icons": {"wake": "🎵", "clothes": "👘", "breakfast": "🍜", "teeth": "✨"},
   "sky": {"type": "emoji", "emoji": "🌟", "size": 54}, "clouds": False, "confetti": ["🎤", "💜", "✨", "🐯", "🎶"],
   "decor": [{"emoji": "✨", "x": 130, "y": 60, "size": 24}, {"emoji": "🎶", "x": 300, "y": 40, "size": 26}, {"emoji": "💜", "x": 560, "y": 70, "size": 22},
-            {"emoji": "✨", "x": 760, "y": 100, "size": 20}, {"emoji": "🎵", "x": 660, "y": 30, "size": 22}, {"emoji": "🌆", "x": 220, "y": 235, "size": 60}],
+            {"emoji": "✨", "x": 760, "y": 100, "size": 20}, {"emoji": "🎵", "x": 660, "y": 30, "size": 22}, {"emoji": "🌆", "x": 460, "y": 118, "size": 60}],
   "rider": SHADOW + '''<ellipse cx="36" cy="52" rx="26" ry="18" fill="#6FB7E9"/><ellipse cx="36" cy="58" rx="16" ry="11" fill="#FFFFFF"/>
 <path d="M18 44 q4 -8 8 0 M28 40 q4 -8 8 0 M40 40 q4 -8 8 0 M50 44 q4 -8 8 0" stroke="#1F2A44" stroke-width="3" fill="none" stroke-linecap="round"/>
 <rect x="16" y="62" width="9" height="16" rx="4" fill="#6FB7E9"/><rect x="46" y="62" width="9" height="16" rx="4" fill="#6FB7E9"/>
@@ -105,7 +107,7 @@ THEMES = {
             "win": "Arrivée à {time}, avant {goal} ! 🌰 Les Noiraudes dansent !", "late": "Arrivée à {time}. Demain avant {goal}, promis à Totoro ?"},
   "icons": {"wake": "🌱", "clothes": "☂️", "breakfast": "🍙", "teeth": "🪥"},
   "sky": {"type": "sun"}, "clouds": True, "confetti": ["🌰", "🍃", "☂️", "🌱", "✨"],
-  "decor": [{"emoji": "🌳", "x": 560, "y": 232, "size": 70}, {"emoji": "🌿", "x": 160, "y": 244, "size": 24}, {"emoji": "🚌", "x": 870, "y": 244, "size": 26}],
+  "decor": [{"emoji": "🌳", "x": 700, "y": 246, "size": 64}, {"emoji": "🌿", "x": 220, "y": 246, "size": 28}, {"emoji": "🍃", "x": 420, "y": 110, "size": 22}],
   "rider": SHADOW + '''<ellipse cx="38" cy="50" rx="25" ry="28" fill="#8C8C8C"/><ellipse cx="38" cy="58" rx="16" ry="18" fill="#DCDCD2"/>
 <path d="M29 50 l4 3 l4 -3 M41 50 l4 3 l4 -3 M35 58 l4 3 l4 -3" stroke="#8C8C8C" stroke-width="1.6" fill="none"/>
 <path d="M22 28 l4 -16 l9 13 z" fill="#8C8C8C"/><path d="M54 28 l-4 -16 l-9 13 z" fill="#8C8C8C"/>
@@ -142,7 +144,7 @@ THEMES = {
             "win": "Arrivée à {time}, avant {goal} ! 🏴‍☠️ Capitaine Romane !", "late": "Arrivée à {time}. Demain, on accoste avant {goal} ?"},
   "icons": {"wake": "🦜", "clothes": "🧢", "breakfast": "🍌", "teeth": "🦷"},
   "sky": {"type": "sun"}, "clouds": True, "confetti": ["🏴‍☠️", "💰", "🦜", "⚓", "🪙"],
-  "decor": [{"emoji": "🏝️", "x": 880, "y": 238, "size": 50}, {"emoji": "🐚", "x": 240, "y": 246, "size": 20}, {"emoji": "🐟", "x": 480, "y": 262, "size": 20}],
+  "decor": [{"emoji": "🏝️", "x": 700, "y": 246, "size": 50}, {"emoji": "🐚", "x": 220, "y": 246, "size": 22}, {"emoji": "🐟", "x": 440, "y": 300, "size": 20}],
   "rider": '''<path d="M4 56 q36 16 72 0 l-8 18 h-56 z" fill="#7A4A21"/><path d="M8 58 q32 12 64 0" stroke="#5A3416" stroke-width="2" fill="none"/>
 <line x1="40" y1="56" x2="40" y2="8" stroke="#4E342E" stroke-width="3"/>
 <path d="M42 14 q24 16 0 34 z" fill="#F6EFD8"/><path d="M38 18 q-18 14 0 28 z" fill="#E8DCC0"/>
@@ -157,7 +159,7 @@ THEMES = {
             "win": "Arrivée à {time}, avant {goal} ! 🦖 Reine des dinos !", "late": "Arrivée à {time}. Demain, on court avant {goal} ?"},
   "icons": {"wake": "🌋", "clothes": "🦖", "breakfast": "🥚", "teeth": "🦷"},
   "sky": {"type": "sun"}, "clouds": True, "confetti": ["🦕", "🦖", "🌴", "🥚", "🎉"],
-  "decor": [{"emoji": "🌋", "x": 120, "y": 232, "size": 60}, {"emoji": "🌴", "x": 700, "y": 238, "size": 44}, {"emoji": "🌴", "x": 900, "y": 230, "size": 34}],
+  "decor": [{"emoji": "🌋", "x": 700, "y": 246, "size": 60}, {"emoji": "🌴", "x": 220, "y": 246, "size": 44}],
   "rider": SHADOW + '''<ellipse cx="34" cy="54" rx="26" ry="16" fill="#66BB6A"/>
 <path d="M8 58 c-10 2 -14 12 -8 16 c4 -8 8 -8 12 -10z" fill="#66BB6A"/>
 <rect x="16" y="62" width="10" height="16" rx="4" fill="#4CAF50"/><rect x="42" y="62" width="10" height="16" rx="4" fill="#4CAF50"/>
@@ -175,7 +177,7 @@ THEMES = {
             "win": "Arrivée à {time}, avant {goal} ! 🐚 Reine du lagon !", "late": "Arrivée à {time}. Demain, on nage avant {goal} ?"},
   "icons": {"wake": "🐚", "clothes": "👗", "breakfast": "🍓", "teeth": "🪥"},
   "sky": {"type": "sun"}, "clouds": True, "confetti": ["🐚", "🐠", "🫧", "💗", "⭐"],
-  "decor": [{"emoji": "🐠", "x": 200, "y": 268, "size": 22}, {"emoji": "🐙", "x": 620, "y": 272, "size": 24}, {"emoji": "🫧", "x": 420, "y": 258, "size": 18}, {"emoji": "⛵", "x": 840, "y": 120, "size": 30}],
+  "decor": [{"emoji": "🐠", "x": 200, "y": 300, "size": 22}, {"emoji": "🐙", "x": 680, "y": 302, "size": 24}, {"emoji": "🫧", "x": 440, "y": 298, "size": 18}, {"emoji": "⛵", "x": 840, "y": 120, "size": 30}],
   "rider": '''<path d="M6 76 q18 -6 30 -22 q-4 20 -12 26 z" fill="#26A69A"/><path d="M2 78 l14 -10 l-2 14 z" fill="#26A69A"/>
 <path d="M32 56 q10 -4 14 -20 q6 14 4 26 q-10 4 -18 -6z" fill="#26A69A"/>
 <ellipse cx="46" cy="36" rx="9" ry="12" fill="#F5D0B0"/><path d="M38 34 h16 v6 h-16z" fill="#7E57C2"/>
@@ -193,7 +195,7 @@ THEMES = {
             "win": "Arrivée à {time}, avant {goal} ! ⚡ Pika-pika !", "late": "Arrivée à {time}. Demain, tous les badges avant {goal} ?"},
   "icons": {"wake": "⚡", "clothes": "🧢", "breakfast": "🍎", "teeth": "🪥"},
   "sky": {"type": "sun"}, "clouds": True, "confetti": ["⚡", "⭐", "🔴", "🎉", "💛"],
-  "decor": [{"emoji": "🌲", "x": 140, "y": 236, "size": 44}, {"emoji": "🌲", "x": 860, "y": 240, "size": 36}, {"emoji": "🏟️", "x": 640, "y": 232, "size": 44}],
+  "decor": [{"emoji": "🌲", "x": 220, "y": 246, "size": 44}, {"emoji": "🏟️", "x": 700, "y": 246, "size": 44}],
   "rider": SHADOW + '''<path d="M10 60 l-8 -4 l6 -8 l-8 -4 l12 -8 l2 10 l8 -2z" fill="#8D6E63"/><path d="M6 54 l-2 -8 l8 -4 l-2 8z" fill="#FFD54F"/>
 <ellipse cx="38" cy="54" rx="20" ry="18" fill="#FFD54F"/><rect x="24" y="66" width="9" height="12" rx="4" fill="#FFD54F"/><rect x="42" y="66" width="9" height="12" rx="4" fill="#FFD54F"/>
 <circle cx="42" cy="30" r="17" fill="#FFD54F"/>
@@ -215,7 +217,7 @@ THEMES = {
   "sky": {"type": "none"}, "clouds": False, "confetti": ["💎", "⛏️", "🟩", "🎉", "🧱"],
   "decor": [{"rect": 1, "x": 880, "y": 30, "w": 60, "h": 60, "fill": "#FFF176"}, {"rect": 1, "x": 120, "y": 50, "w": 90, "h": 24, "fill": "#ffffff"}, {"rect": 1, "x": 150, "y": 36, "w": 40, "h": 14, "fill": "#ffffff"},
             {"rect": 1, "x": 540, "y": 40, "w": 80, "h": 22, "fill": "#ffffff"}, {"rect": 1, "x": 560, "y": 26, "w": 36, "h": 14, "fill": "#ffffff"},
-            {"emoji": "🌳", "x": 700, "y": 240, "size": 40}, {"emoji": "🏠", "x": 300, "y": 240, "size": 40}],
+            {"emoji": "🌳", "x": 700, "y": 246, "size": 40}, {"emoji": "🏠", "x": 220, "y": 246, "size": 40}],
   "rider": '''<rect x="22" y="36" width="32" height="30" fill="#4CAF50"/><rect x="22" y="36" width="8" height="8" fill="#388E3C"/><rect x="42" y="50" width="8" height="8" fill="#388E3C"/><rect x="30" y="58" width="6" height="6" fill="#81C784"/>
 <rect x="18" y="66" width="12" height="12" fill="#388E3C"/><rect x="46" y="66" width="12" height="12" fill="#388E3C"/>
 <rect x="26" y="8" width="26" height="26" fill="#5CB85C"/><rect x="26" y="8" width="6" height="6" fill="#7BD37B"/><rect x="44" y="26" width="6" height="6" fill="#4A9A4A"/>
