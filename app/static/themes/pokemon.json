@@ -1,0 +1,70 @@
+{
+ "name": "Pokémon",
+ "emoji": "⚡",
+ "colors": {
+  "sky": "#CDEBFF",
+  "dawn": "#FFF3B0",
+  "horizon": "#FFFBE6",
+  "ground": "#66BB6A",
+  "path": "#F5D75E",
+  "pathDone": "#EF5350",
+  "ink": "#1F2A44",
+  "cloud": "#ffffff",
+  "mist": "#7F8FA8",
+  "accent": "#EF5350",
+  "ok": "#2E7D32",
+  "sun": "#FFD23F",
+  "discDone": "#FFF8DC"
+ },
+ "texts": {
+  "title": "En route vers l'arène, Romane !",
+  "subtitle": "Quatre badges à gagner avant {goal}. Pikachu, go !",
+  "msgs": [
+   "Un nouveau dresseur se réveille !",
+   "Premier badge !",
+   "À mi-chemin de l'arène !",
+   "Le dernier badge est proche…",
+   "Champion·ne de la ligue ! 🎉"
+  ],
+  "win": "Arrivée à {time}, avant {goal} ! ⚡ Pika-pika !",
+  "late": "Arrivée à {time}. Demain, tous les badges avant {goal} ?"
+ },
+ "icons": {
+  "wake": "⚡",
+  "clothes": "🧢",
+  "breakfast": "🍎",
+  "teeth": "🪥"
+ },
+ "sky": {
+  "type": "sun"
+ },
+ "clouds": true,
+ "confetti": [
+  "⚡",
+  "⭐",
+  "🔴",
+  "🎉",
+  "💛"
+ ],
+ "decor": [
+  {
+   "emoji": "🌲",
+   "x": 140,
+   "y": 236,
+   "size": 44
+  },
+  {
+   "emoji": "🌲",
+   "x": 860,
+   "y": 240,
+   "size": 36
+  },
+  {
+   "emoji": "🏟️",
+   "x": 640,
+   "y": 232,
+   "size": 44
+  }
+ ],
+ "rider": "<ellipse cx=\"38\" cy=\"79\" rx=\"16\" ry=\"4\" fill=\"rgba(0,0,0,.14)\"/><path d=\"M10 60 l-8 -4 l6 -8 l-8 -4 l12 -8 l2 10 l8 -2z\" fill=\"#8D6E63\"/><path d=\"M6 54 l-2 -8 l8 -4 l-2 8z\" fill=\"#FFD54F\"/>\n<ellipse cx=\"38\" cy=\"54\" rx=\"20\" ry=\"18\" fill=\"#FFD54F\"/><rect x=\"24\" y=\"66\" width=\"9\" height=\"12\" rx=\"4\" fill=\"#FFD54F\"/><rect x=\"42\" y=\"66\" width=\"9\" height=\"12\" rx=\"4\" fill=\"#FFD54F\"/>\n<circle cx=\"42\" cy=\"30\" r=\"17\" fill=\"#FFD54F\"/>\n<path d=\"M30 18 l-8 -16 l14 10z\" fill=\"#FFD54F\"/><path d=\"M22 2 l4 8 l-6 2z\" fill=\"#222\"/>\n<path d=\"M54 18 l8 -16 l-14 10z\" fill=\"#FFD54F\"/><path d=\"M62 2 l-4 8 l6 2z\" fill=\"#222\"/>\n<circle cx=\"36\" cy=\"28\" r=\"3\" fill=\"#222\"/><circle cx=\"48\" cy=\"28\" r=\"3\" fill=\"#222\"/><circle cx=\"37\" cy=\"27\" r=\"1\" fill=\"#fff\"/><circle cx=\"49\" cy=\"27\" r=\"1\" fill=\"#fff\"/>\n<circle cx=\"30\" cy=\"36\" r=\"4\" fill=\"#E53935\"/><circle cx=\"54\" cy=\"36\" r=\"4\" fill=\"#E53935\"/>\n<path d=\"M40 34 q2 2 4 0\" stroke=\"#222\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M38 38 q4 4 8 0\" stroke=\"#222\" stroke-width=\"1.4\" fill=\"none\"/>\n<path d=\"M22 50 h8 M22 56 h6\" stroke=\"#8D6E63\" stroke-width=\"3\" stroke-linecap=\"round\"/>"
+}

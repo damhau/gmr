@@ -1,0 +1,108 @@
+{
+ "name": "Espace",
+ "emoji": "🚀",
+ "colors": {
+  "sky": "#0B1026",
+  "dawn": "#1B2A5C",
+  "horizon": "#2E3F7A",
+  "ground": "#8D8FA3",
+  "path": "#B8C0E0",
+  "pathDone": "#FFB347",
+  "ink": "#F2F5FF",
+  "cloud": "#3A4A80",
+  "mist": "#A9B4D8",
+  "accent": "#FF7A3D",
+  "ok": "#7CFFB2",
+  "sun": "#FFD23F",
+  "discDone": "#2B3A6E"
+ },
+ "texts": {
+  "title": "Décollage pour l'école, Romane !",
+  "subtitle": "Quatre étapes de la check-list. Mise en orbite avant {goal} ?",
+  "msgs": [
+   "Compte à rebours lancé !",
+   "Moteurs allumés !",
+   "À mi-chemin de la Lune !",
+   "Approche finale…",
+   "Mission accomplie ! 🎉"
+  ],
+  "win": "Arrivée à {time}, avant {goal} ! 🚀 Houston est fier de toi !",
+  "late": "Arrivée à {time}. Demain, orbite avant {goal} ?"
+ },
+ "icons": {
+  "wake": "🌍",
+  "clothes": "👩‍🚀",
+  "breakfast": "🥣",
+  "teeth": "🪐"
+ },
+ "sky": {
+  "type": "emoji",
+  "emoji": "🌕",
+  "size": 60
+ },
+ "clouds": false,
+ "confetti": [
+  "🚀",
+  "⭐",
+  "🪐",
+  "🌟",
+  "👩‍🚀"
+ ],
+ "decor": [
+  {
+   "circle": 1,
+   "x": 80,
+   "y": 50,
+   "r": 2,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 260,
+   "y": 30,
+   "r": 1.6,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 400,
+   "y": 90,
+   "r": 2.2,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 640,
+   "y": 40,
+   "r": 1.5,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 760,
+   "y": 110,
+   "r": 2,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 180,
+   "y": 130,
+   "r": 1.4,
+   "fill": "#fff"
+  },
+  {
+   "emoji": "🪐",
+   "x": 330,
+   "y": 70,
+   "size": 40
+  },
+  {
+   "emoji": "🛸",
+   "x": 700,
+   "y": 60,
+   "size": 30
+  }
+ ],
+ "rider": "<ellipse cx=\"38\" cy=\"79\" rx=\"16\" ry=\"4\" fill=\"rgba(0,0,0,.14)\"/><path d=\"M40 6 C 58 24, 58 52, 40 66 C 22 52, 22 24, 40 6z\" fill=\"#F4F4F4\"/>\n<path d=\"M40 6 C 48 14, 52 22, 53 28 L 27 28 C 28 22, 32 14, 40 6z\" fill=\"#E53935\"/>\n<circle cx=\"40\" cy=\"38\" r=\"7\" fill=\"#64B5F6\" stroke=\"#37474F\" stroke-width=\"2.5\"/>\n<path d=\"M24 50 l-10 16 l14 -4z\" fill=\"#E53935\"/><path d=\"M56 50 l10 16 l-14 -4z\" fill=\"#E53935\"/>\n<path d=\"M33 64 h14 l-7 16z\" fill=\"#FFB300\"/><path d=\"M36 64 h8 l-4 9z\" fill=\"#FFF176\"/>"
+}

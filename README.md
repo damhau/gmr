@@ -42,6 +42,13 @@ The admin page shows the running version and the deploy log, and has an "update 
 
 Manual: `ssh damien@192.168.68.75 'sudo systemctl start gmr-deploy-now.service; tail ~/gmr-data/deploy.log'`
 
+## Themes
+The kid screen is themed. One JSON file per theme in `app/static/themes/` (colours, texts with `{goal}`/`{time}`
+placeholders, station icons, sky, decorations, confetti, and the rider as an SVG fragment in an 80x80 box).
+Shipped: licorne (default), shrek, harry-potter, kpop-demon-hunters, totoro, espace, pirates, dinosaures, sirene,
+pokemon, minecraft. Switch in `/admin` (applies live over SSE), preview any with `/?theme=<id>`.
+To add one: edit `app/tools_make_themes.py` (or write the JSON by hand), run it, push. `GET /api/themes` lists them.
+
 ## API
     POST /event          {"task":"wake|clothes|breakfast|teeth","action":"done|undo|skip"}
                          (also accepts ?task=wake&action=done)

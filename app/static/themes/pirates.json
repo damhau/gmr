@@ -1,0 +1,70 @@
+{
+ "name": "Pirates",
+ "emoji": "🏴‍☠️",
+ "colors": {
+  "sky": "#BFE3F5",
+  "dawn": "#FFE9C7",
+  "horizon": "#FFF3E0",
+  "ground": "#2E86C1",
+  "path": "#E8D3A2",
+  "pathDone": "#C0392B",
+  "ink": "#1F2D3D",
+  "cloud": "#ffffff",
+  "mist": "#6F8FA8",
+  "accent": "#C0392B",
+  "ok": "#1E8449",
+  "sun": "#FFD23F",
+  "discDone": "#FFF1E0"
+ },
+ "texts": {
+  "title": "À l'abordage de l'école, Romane !",
+  "subtitle": "Quatre étapes sur la carte au trésor. Le trésor est à {goal} !",
+  "msgs": [
+   "Tous sur le pont !",
+   "Hissez les voiles !",
+   "À mi-chemin de l'île !",
+   "Terre en vue…",
+   "Le trésor est à toi ! 🎉"
+  ],
+  "win": "Arrivée à {time}, avant {goal} ! 🏴‍☠️ Capitaine Romane !",
+  "late": "Arrivée à {time}. Demain, on accoste avant {goal} ?"
+ },
+ "icons": {
+  "wake": "🦜",
+  "clothes": "🧢",
+  "breakfast": "🍌",
+  "teeth": "🦷"
+ },
+ "sky": {
+  "type": "sun"
+ },
+ "clouds": true,
+ "confetti": [
+  "🏴‍☠️",
+  "💰",
+  "🦜",
+  "⚓",
+  "🪙"
+ ],
+ "decor": [
+  {
+   "emoji": "🏝️",
+   "x": 880,
+   "y": 238,
+   "size": 50
+  },
+  {
+   "emoji": "🐚",
+   "x": 240,
+   "y": 246,
+   "size": 20
+  },
+  {
+   "emoji": "🐟",
+   "x": 480,
+   "y": 262,
+   "size": 20
+  }
+ ],
+ "rider": "<path d=\"M4 56 q36 16 72 0 l-8 18 h-56 z\" fill=\"#7A4A21\"/><path d=\"M8 58 q32 12 64 0\" stroke=\"#5A3416\" stroke-width=\"2\" fill=\"none\"/>\n<line x1=\"40\" y1=\"56\" x2=\"40\" y2=\"8\" stroke=\"#4E342E\" stroke-width=\"3\"/>\n<path d=\"M42 14 q24 16 0 34 z\" fill=\"#F6EFD8\"/><path d=\"M38 18 q-18 14 0 28 z\" fill=\"#E8DCC0\"/>\n<text x=\"42\" y=\"12\" font-size=\"12\">🏴‍☠️</text>"
+}

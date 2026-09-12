@@ -15,7 +15,8 @@ API:
   GET  /api/buttons      mapping + every button seen so far (to find serials)
   POST /api/buttons      {"mapping": {"<serial>": "<task>"|""}}  writes buttons.json ("" removes)
   POST /api/buttons/forget {"serial": "..."}  drop a button from the seen list
-  GET/POST /api/settings {"goal":"07:30","targets":{"wake":"06:45",...}}  -> settings.json
+  GET/POST /api/settings {"goal":"07:30","targets":{"wake":"06:45",...},"theme":"licorne"}  -> settings.json
+  GET  /api/themes       themes available in static/themes/*.json (id, name, emoji)
   GET  /admin            configuration page: buttons + step times (LAN only, no auth)
   GET  /api/today
   GET  /api/week?offset=0
@@ -119,9 +120,24 @@ def valid_time(v) -> bool:
     return isinstance(v, str) and bool(re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", v))
 
 
+THEMES_DIR = STATIC / "themes"
+DEFAULT_THEME = "licorne"
+
+
+def list_themes() -> list:
+    out = []
+    for f in sorted(THEMES_DIR.glob("*.json")):
+        try:
+            t = json.loads(f.read_text(encoding="utf-8"))
+            out.append({"id": f.stem, "name": t.get("name", f.stem), "emoji": t.get("emoji", "")})
+        except ValueError:
+            out.append({"id": f.stem, "name": f.stem + " (JSON invalide)", "emoji": "⚠️"})
+    return out
+
+
 def settings() -> dict:
-    """settings.json: {"goal": "07:30", "targets": {"wake": "06:45", ...}} - edited from /admin."""
-    goal, targets = GOAL_TIME, {t: DEFAULT_TARGETS.get(t, "") for t in TASKS}
+    """settings.json: {"goal": "07:30", "targets": {"wake": "06:45", ...}, "theme": "licorne"} - edited from /admin."""
+    goal, targets, theme = GOAL_TIME, {t: DEFAULT_TARGETS.get(t, "") for t in TASKS}, DEFAULT_THEME
     try:
         d = json.loads(SETTINGS_FILE.read_text())
         if valid_time(d.get("goal")):
@@ -129,9 +145,11 @@ def settings() -> dict:
         for t, v in (d.get("targets") or {}).items():
             if t in targets and (valid_time(v) or v == ""):
                 targets[t] = v
+        if isinstance(d.get("theme"), str) and (THEMES_DIR / (d["theme"] + ".json")).is_file():
+            theme = d["theme"]
     except (FileNotFoundError, ValueError, AttributeError):
         pass
-    return {"goal": goal, "targets": targets}
+    return {"goal": goal, "targets": targets, "theme": theme}
 
 
 def save_settings(d: dict) -> dict:
@@ -148,6 +166,11 @@ def save_settings(d: dict) -> dict:
         if v not in ("", None) and not valid_time(v):
             return {"ok": False, "error": f"{t}: expected HH:MM, got {v!r}"}
         cur["targets"][t] = v or ""
+    if "theme" in d:
+        th = str(d["theme"])
+        if not re.fullmatch(r"[a-z0-9-]+", th) or not (THEMES_DIR / (th + ".json")).is_file():
+            return {"ok": False, "error": f"unknown theme {th!r}", "themes": [t["id"] for t in list_themes()]}
+        cur["theme"] = th
     tmp = SETTINGS_FILE.with_suffix(".tmp")
     tmp.write_text(json.dumps(cur, indent=2) + "\n")
     tmp.replace(SETTINGS_FILE)
@@ -480,7 +503,7 @@ def api_today() -> dict:
     cfg = settings()
     with db() as con:
         d = now().date()
-        return {"day": d.isoformat(), "goal": cfg["goal"], "targets": cfg["targets"], "version": VERSION,
+        return {"day": d.isoformat(), "goal": cfg["goal"], "targets": cfg["targets"], "version": VERSION, "theme": cfg["theme"],
                 "now": now().strftime("%H:%M"), **summarize(day_status(con, d), cfg["goal"])}
 
 
@@ -603,6 +626,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(settings())
         if u.path == "/api/version":
             return self.send_json(api_version())
+        if u.path == "/api/themes":
+            return self.send_json({"themes": list_themes(), "active": settings()["theme"]})
         if u.path == "/api/kiosk":   # used by deploy/kiosk.sh as a "page really loaded" check
             with _subs_lock:
                 ips = list(_subs.values())

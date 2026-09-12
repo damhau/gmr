@@ -1,0 +1,76 @@
+{
+ "name": "Sirène",
+ "emoji": "🧜‍♀️",
+ "colors": {
+  "sky": "#BFEAF5",
+  "dawn": "#9FD8E8",
+  "horizon": "#7CC5DA",
+  "ground": "#1E88A8",
+  "path": "#F6E7B2",
+  "pathDone": "#FF8AAE",
+  "ink": "#12384A",
+  "cloud": "#ffffff",
+  "mist": "#5E93A6",
+  "accent": "#FF6F9C",
+  "ok": "#0E8A6A",
+  "sun": "#FFD23F",
+  "discDone": "#FFF0F5"
+ },
+ "texts": {
+  "title": "Vers l'école sous la mer, Romane !",
+  "subtitle": "Quatre coquillages, puis le drapeau. Marée haute à {goal} !",
+  "msgs": [
+   "Les vagues t'appellent !",
+   "Un coquillage trouvé !",
+   "À mi-chemin du lagon !",
+   "Le récif est en vue…",
+   "Tu as traversé l'océan ! 🎉"
+  ],
+  "win": "Arrivée à {time}, avant {goal} ! 🐚 Reine du lagon !",
+  "late": "Arrivée à {time}. Demain, on nage avant {goal} ?"
+ },
+ "icons": {
+  "wake": "🐚",
+  "clothes": "👗",
+  "breakfast": "🍓",
+  "teeth": "🪥"
+ },
+ "sky": {
+  "type": "sun"
+ },
+ "clouds": true,
+ "confetti": [
+  "🐚",
+  "🐠",
+  "🫧",
+  "💗",
+  "⭐"
+ ],
+ "decor": [
+  {
+   "emoji": "🐠",
+   "x": 200,
+   "y": 268,
+   "size": 22
+  },
+  {
+   "emoji": "🐙",
+   "x": 620,
+   "y": 272,
+   "size": 24
+  },
+  {
+   "emoji": "🫧",
+   "x": 420,
+   "y": 258,
+   "size": 18
+  },
+  {
+   "emoji": "⛵",
+   "x": 840,
+   "y": 120,
+   "size": 30
+  }
+ ],
+ "rider": "<path d=\"M6 76 q18 -6 30 -22 q-4 20 -12 26 z\" fill=\"#26A69A\"/><path d=\"M2 78 l14 -10 l-2 14 z\" fill=\"#26A69A\"/>\n<path d=\"M32 56 q10 -4 14 -20 q6 14 4 26 q-10 4 -18 -6z\" fill=\"#26A69A\"/>\n<ellipse cx=\"46\" cy=\"36\" rx=\"9\" ry=\"12\" fill=\"#F5D0B0\"/><path d=\"M38 34 h16 v6 h-16z\" fill=\"#7E57C2\"/>\n<circle cx=\"47\" cy=\"20\" r=\"10\" fill=\"#F5D0B0\"/>\n<path d=\"M36 18 q10 -14 22 -2 q2 14 -2 22 q-4 -8 -2 -14 q-8 2 -14 8 q-4 -4 -4 -14z\" fill=\"#E53935\"/>\n<circle cx=\"44\" cy=\"20\" r=\"1.6\" fill=\"#222\"/><circle cx=\"51\" cy=\"20\" r=\"1.6\" fill=\"#222\"/><path d=\"M45 25 q3 2 6 0\" stroke=\"#B3405A\" stroke-width=\"1.4\" fill=\"none\"/>\n<text x=\"54\" y=\"12\" font-size=\"10\">⭐</text>"
+}

@@ -65,6 +65,18 @@
     <span class="status" id="status"></span>
   </div>
 
+  <h2>Thème de l'écran</h2>
+  <div class="card" style="padding:12px 14px">
+    <div class="row">
+      <select id="theme"></select>
+      <button class="primary" id="saveTheme" disabled>Appliquer</button>
+      <a id="previewTheme" href="/" target="_blank">Aperçu dans un nouvel onglet ↗</a>
+      <span class="status" id="themeStatus"></span>
+    </div>
+    <p class="sub" style="margin:10px 0 0;font-size:.85rem">L'écran de Romane change de thème tout seul, sans redémarrer. Pour ajouter un thème : un fichier
+      <code>app/static/themes/&lt;id&gt;.json</code> (voir <code>tools_make_themes.py</code>), puis push.</p>
+  </div>
+
   <h2>Horaires</h2>
   <div class="card" style="padding:12px 14px">
     <div class="row" id="times"></div>
@@ -194,6 +206,22 @@ async function deployNow(){
   if(r.ok){st.textContent="Lancé. Le journal se met à jour dans quelques secondes.";st.className="status ok";setTimeout(loadVersion,5000);setTimeout(loadVersion,15000);setTimeout(loadVersion,30000);}
   else{st.textContent="Impossible : "+(r.error||"?");st.className="status err";}
 }
+let activeTheme=null;
+async function loadThemes(){
+  try{const d=await fetch("/api/themes",{cache:"no-store"}).then(r=>r.json());
+    const sel=$("theme"); const cur=sel.value;
+    sel.innerHTML=d.themes.map(t=>`<option value="${t.id}">${t.emoji} ${t.name}</option>`).join("");
+    activeTheme=d.active; sel.value=(cur&&[...sel.options].some(o=>o.value===cur))?cur:d.active;
+    $("previewTheme").href="/?theme="+encodeURIComponent(sel.value);
+  }catch(e){}
+}
+$("theme").onchange=()=>{$("saveTheme").disabled=$("theme").value===activeTheme;$("previewTheme").href="/?theme="+encodeURIComponent($("theme").value);};
+async function saveTheme(){
+  const st=$("themeStatus");
+  const r=await fetch("/api/settings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({theme:$("theme").value})}).then(r=>r.json());
+  if(r.ok){activeTheme=r.theme;$("saveTheme").disabled=true;st.textContent="Appliqué ✓";st.className="status ok";}
+  else{st.textContent=r.error||"Erreur";st.className="status err";}
+}
 let timesDirty=false;
 function renderTimes(cfg){
   if(timesDirty)return;
@@ -228,15 +256,15 @@ function renderToday(t){
     `</div><div class="meta" style="margin-top:6px;color:var(--mist);font-size:.85rem">${t.done}/${t.total} · objectif ${fr(t.goal)} · il est ${fr(t.now)}</div>`;
 }
 
-$("save").onclick=save; $("add").onclick=add; $("saveTimes").onclick=saveTimes; $("deploy").onclick=deployNow;
+$("save").onclick=save; $("add").onclick=add; $("saveTimes").onclick=saveTimes; $("deploy").onclick=deployNow; $("saveTheme").onclick=saveTheme;
 $("newSerial").addEventListener("keydown",e=>{if(e.key==="Enter")add();});
 const es=new EventSource("/api/stream");
 es.addEventListener("buttons",()=>load());
-es.addEventListener("today",e=>{const t=JSON.parse(e.data);renderToday(t);renderTimes({goal:t.goal,targets:t.targets});});
-es.onopen=()=>{$("dot").classList.add("on");load();loadVersion();};
+es.addEventListener("today",e=>{const t=JSON.parse(e.data);renderToday(t);renderTimes({goal:t.goal,targets:t.targets});if(t.theme&&t.theme!==activeTheme)loadThemes();});
+es.onopen=()=>{$("dot").classList.add("on");load();loadVersion();loadThemes();};
 es.onerror=()=>$("dot").classList.remove("on");
 setInterval(load,30000);   // fallback + refreshes the "il y a X s" texts
-load();loadVersion();
+load();loadVersion();loadThemes();
 </script>
 </body>
 </html>

@@ -1,0 +1,70 @@
+{
+ "name": "Totoro",
+ "emoji": "🌰",
+ "colors": {
+  "sky": "#CDE9E0",
+  "dawn": "#E8F1D7",
+  "horizon": "#F6F3E4",
+  "ground": "#6BAF6B",
+  "path": "#C9B58E",
+  "pathDone": "#8C6E4A",
+  "ink": "#2F3A2F",
+  "cloud": "#ffffff",
+  "mist": "#8AA08A",
+  "accent": "#E07B39",
+  "ok": "#2E7D4F",
+  "sun": "#F8D66D",
+  "discDone": "#EAF3E4"
+ },
+ "texts": {
+  "title": "Sur le chemin de l'école, Romane !",
+  "subtitle": "Quatre étapes avant le Chat-bus. Il passe à {goal} !",
+  "msgs": [
+   "Totoro t'attend au camphrier !",
+   "Un gland ramassé !",
+   "À mi-chemin, sous le parapluie !",
+   "Le Chat-bus arrive…",
+   "Le Chat-bus est là ! 🎉"
+  ],
+  "win": "Arrivée à {time}, avant {goal} ! 🌰 Les Noiraudes dansent !",
+  "late": "Arrivée à {time}. Demain avant {goal}, promis à Totoro ?"
+ },
+ "icons": {
+  "wake": "🌱",
+  "clothes": "☂️",
+  "breakfast": "🍙",
+  "teeth": "🪥"
+ },
+ "sky": {
+  "type": "sun"
+ },
+ "clouds": true,
+ "confetti": [
+  "🌰",
+  "🍃",
+  "☂️",
+  "🌱",
+  "✨"
+ ],
+ "decor": [
+  {
+   "emoji": "🌳",
+   "x": 560,
+   "y": 232,
+   "size": 70
+  },
+  {
+   "emoji": "🌿",
+   "x": 160,
+   "y": 244,
+   "size": 24
+  },
+  {
+   "emoji": "🚌",
+   "x": 870,
+   "y": 244,
+   "size": 26
+  }
+ ],
+ "rider": "<ellipse cx=\"38\" cy=\"79\" rx=\"16\" ry=\"4\" fill=\"rgba(0,0,0,.14)\"/><ellipse cx=\"38\" cy=\"50\" rx=\"25\" ry=\"28\" fill=\"#8C8C8C\"/><ellipse cx=\"38\" cy=\"58\" rx=\"16\" ry=\"18\" fill=\"#DCDCD2\"/>\n<path d=\"M29 50 l4 3 l4 -3 M41 50 l4 3 l4 -3 M35 58 l4 3 l4 -3\" stroke=\"#8C8C8C\" stroke-width=\"1.6\" fill=\"none\"/>\n<path d=\"M22 28 l4 -16 l9 13 z\" fill=\"#8C8C8C\"/><path d=\"M54 28 l-4 -16 l-9 13 z\" fill=\"#8C8C8C\"/>\n<circle cx=\"30\" cy=\"34\" r=\"3.6\" fill=\"#fff\"/><circle cx=\"46\" cy=\"34\" r=\"3.6\" fill=\"#fff\"/><circle cx=\"30\" cy=\"34\" r=\"1.6\" fill=\"#222\"/><circle cx=\"46\" cy=\"34\" r=\"1.6\" fill=\"#222\"/>\n<ellipse cx=\"38\" cy=\"39\" rx=\"3\" ry=\"2\" fill=\"#333\"/>\n<path d=\"M12 36 h11 M12 41 h11 M53 36 h11 M53 41 h11\" stroke=\"#333\" stroke-width=\"1.2\" stroke-linecap=\"round\"/>\n<ellipse cx=\"42\" cy=\"14\" rx=\"9\" ry=\"4\" fill=\"#5FAF4B\" transform=\"rotate(-20 42 14)\"/>\n<ellipse cx=\"27\" cy=\"77\" rx=\"9\" ry=\"3\" fill=\"#7A7A7A\"/><ellipse cx=\"49\" cy=\"77\" rx=\"9\" ry=\"3\" fill=\"#7A7A7A\"/>"
+}

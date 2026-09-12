@@ -1,0 +1,129 @@
+{
+ "name": "Harry Potter",
+ "emoji": "⚡",
+ "colors": {
+  "sky": "#141A3A",
+  "dawn": "#2B2F63",
+  "horizon": "#4A3A6B",
+  "ground": "#2F4A3A",
+  "path": "#C9A24A",
+  "pathDone": "#F3D57A",
+  "ink": "#F5ECD3",
+  "cloud": "#3C4577",
+  "mist": "#B9B0D9",
+  "accent": "#E5B84A",
+  "ok": "#8FE39A",
+  "sun": "#F5ECD3",
+  "discDone": "#3B3560"
+ },
+ "texts": {
+  "title": "Direction Poudlard, Romane !",
+  "subtitle": "Quatre sortilèges, puis le drapeau. Le Poudlard Express part à {goal} !",
+  "msgs": [
+   "Accio réveil !",
+   "Un sortilège réussi !",
+   "À mi-chemin du château !",
+   "La tour d'astronomie est en vue…",
+   "10 points pour Romane ! 🎉"
+  ],
+  "win": "Arrivée à {time}, avant {goal} ! ⚡ Le Choixpeau est fier de toi !",
+  "late": "Arrivée à {time}. Demain, on attrape le train avant {goal} ?"
+ },
+ "icons": {
+  "wake": "🦉",
+  "clothes": "🧣",
+  "breakfast": "🍫",
+  "teeth": "🪄"
+ },
+ "sky": {
+  "type": "emoji",
+  "emoji": "🌙",
+  "size": 58
+ },
+ "clouds": false,
+ "confetti": [
+  "⚡",
+  "🦉",
+  "✨",
+  "🪄",
+  "⭐"
+ ],
+ "decor": [
+  {
+   "circle": 1,
+   "x": 90,
+   "y": 40,
+   "r": 2,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 210,
+   "y": 90,
+   "r": 1.5,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 330,
+   "y": 30,
+   "r": 2.2,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 480,
+   "y": 70,
+   "r": 1.6,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 600,
+   "y": 25,
+   "r": 2,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 720,
+   "y": 95,
+   "r": 1.4,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 810,
+   "y": 40,
+   "r": 2.4,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 160,
+   "y": 140,
+   "r": 1.3,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 560,
+   "y": 130,
+   "r": 1.8,
+   "fill": "#fff"
+  },
+  {
+   "emoji": "🏰",
+   "x": 520,
+   "y": 200,
+   "size": 64
+  },
+  {
+   "emoji": "🦉",
+   "x": 250,
+   "y": 120,
+   "size": 26
+  }
+ ],
+ "rider": "<ellipse cx=\"38\" cy=\"79\" rx=\"16\" ry=\"4\" fill=\"rgba(0,0,0,.14)\"/><line x1=\"4\" y1=\"64\" x2=\"66\" y2=\"44\" stroke=\"#8B5A2B\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n<path d=\"M8 62 L-4 72 M9 65 L0 78 M12 66 L6 78 M6 60 L-8 66\" stroke=\"#C9A24A\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n<path d=\"M28 30 l-9 28 h30 l-7 -28 z\" fill=\"#1F1F2E\"/>\n<circle cx=\"35\" cy=\"22\" r=\"10\" fill=\"#F5D0B0\"/><path d=\"M24 20 q11 -14 22 -1 q-3 -6 -11 -8 q-8 1 -11 9z\" fill=\"#3A2718\"/>\n<circle cx=\"31\" cy=\"24\" r=\"3.5\" fill=\"none\" stroke=\"#222\" stroke-width=\"1.5\"/><circle cx=\"40\" cy=\"24\" r=\"3.5\" fill=\"none\" stroke=\"#222\" stroke-width=\"1.5\"/><line x1=\"34.5\" y1=\"24\" x2=\"36.5\" y2=\"24\" stroke=\"#222\" stroke-width=\"1.5\"/>\n<path d=\"M25 32 h20 v5 h-20 z\" fill=\"#7B1E22\"/><rect x=\"25\" y=\"34\" width=\"20\" height=\"1.6\" fill=\"#E5B84A\"/><path d=\"M43 33 l8 10 l-4 1 l-6 -8z\" fill=\"#7B1E22\"/>\n<path d=\"M35 10 l4 -1 l-2 3 l3 -1 l-4 5 l1 -3 l-3 1 z\" fill=\"#E5B84A\"/>"
+}

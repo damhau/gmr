@@ -1,0 +1,90 @@
+{
+ "name": "KPop Demon Hunters",
+ "emoji": "🎤",
+ "colors": {
+  "sky": "#2A1140",
+  "dawn": "#6A1B9A",
+  "horizon": "#C2185B",
+  "ground": "#3B1A5C",
+  "path": "#FF6FB5",
+  "pathDone": "#7CF5FF",
+  "ink": "#FFF3FB",
+  "cloud": "#8E44AD",
+  "mist": "#D9B3FF",
+  "accent": "#FF3FA4",
+  "ok": "#7CF5FF",
+  "sun": "#FF3FA4",
+  "discDone": "#4B2072"
+ },
+ "texts": {
+  "title": "Huntr/x en scène, Romane !",
+  "subtitle": "Quatre étapes pour sceller le Honmoon avant {goal} !",
+  "msgs": [
+   "Le concert commence !",
+   "Golden ! Premier couplet réussi !",
+   "À mi-chemin, les démons reculent !",
+   "Dernier refrain avant le drapeau…",
+   "Le Honmoon est scellé ! 🎉"
+  ],
+  "win": "Arrivée à {time}, avant {goal} ! 🎤 Rumi, Mira et Zoey t'applaudissent !",
+  "late": "Arrivée à {time}. Demain, on chante plus vite qu'avant {goal} ?"
+ },
+ "icons": {
+  "wake": "🎵",
+  "clothes": "👘",
+  "breakfast": "🍜",
+  "teeth": "✨"
+ },
+ "sky": {
+  "type": "emoji",
+  "emoji": "🌟",
+  "size": 54
+ },
+ "clouds": false,
+ "confetti": [
+  "🎤",
+  "💜",
+  "✨",
+  "🐯",
+  "🎶"
+ ],
+ "decor": [
+  {
+   "emoji": "✨",
+   "x": 130,
+   "y": 60,
+   "size": 24
+  },
+  {
+   "emoji": "🎶",
+   "x": 300,
+   "y": 40,
+   "size": 26
+  },
+  {
+   "emoji": "💜",
+   "x": 560,
+   "y": 70,
+   "size": 22
+  },
+  {
+   "emoji": "✨",
+   "x": 760,
+   "y": 100,
+   "size": 20
+  },
+  {
+   "emoji": "🎵",
+   "x": 660,
+   "y": 30,
+   "size": 22
+  },
+  {
+   "emoji": "🌆",
+   "x": 220,
+   "y": 235,
+   "size": 60
+  }
+ ],
+ "rider": "<ellipse cx=\"38\" cy=\"79\" rx=\"16\" ry=\"4\" fill=\"rgba(0,0,0,.14)\"/><ellipse cx=\"36\" cy=\"52\" rx=\"26\" ry=\"18\" fill=\"#6FB7E9\"/><ellipse cx=\"36\" cy=\"58\" rx=\"16\" ry=\"11\" fill=\"#FFFFFF\"/>\n<path d=\"M18 44 q4 -8 8 0 M28 40 q4 -8 8 0 M40 40 q4 -8 8 0 M50 44 q4 -8 8 0\" stroke=\"#1F2A44\" stroke-width=\"3\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"16\" y=\"62\" width=\"9\" height=\"16\" rx=\"4\" fill=\"#6FB7E9\"/><rect x=\"46\" y=\"62\" width=\"9\" height=\"16\" rx=\"4\" fill=\"#6FB7E9\"/>\n<path d=\"M10 52 c-12 -2 -14 -14 -6 -16\" stroke=\"#6FB7E9\" stroke-width=\"5\" fill=\"none\" stroke-linecap=\"round\"/>\n<circle cx=\"56\" cy=\"34\" r=\"17\" fill=\"#6FB7E9\"/><path d=\"M42 24 l-2 -12 l10 6z M70 24 l2 -12 l-10 6z\" fill=\"#6FB7E9\"/>\n<circle cx=\"50\" cy=\"32\" r=\"7\" fill=\"#fff\"/><circle cx=\"63\" cy=\"32\" r=\"7\" fill=\"#fff\"/><circle cx=\"52\" cy=\"33\" r=\"3.2\" fill=\"#111\"/><circle cx=\"61\" cy=\"31\" r=\"3.2\" fill=\"#111\"/>\n<ellipse cx=\"57\" cy=\"41\" rx=\"3\" ry=\"2\" fill=\"#E0559A\"/><path d=\"M52 45 q5 4 10 0\" stroke=\"#1F2A44\" stroke-width=\"1.5\" fill=\"none\"/>\n<path d=\"M46 20 l3 -6 M66 20 l-3 -6\" stroke=\"#1F2A44\" stroke-width=\"2.5\" stroke-linecap=\"round\"/>"
+}

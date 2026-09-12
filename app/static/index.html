@@ -7,12 +7,12 @@
 <style>
   @font-face{font-family:"Fredoka";font-weight:400 700;font-display:swap;
     src:url(/static/fonts/Fredoka.woff2) format("woff2")}
-  :root{--sky:#D6ECFF;--dawn:#FFE6CB;--ink:#22304F;--sun:#FFD23F;--path:#F7C88C;--path-done:#FF8A65;
-        --grass:#6ED39E;--cloud:#fff;--mist:#8FA8C6;--coral:#FF6F59;--mane:#C58BFF;--mane2:#7DD8FF;--ok:#1F9E63}
+  :root{--sky:#D6ECFF;--dawn:#FFE6CB;--horizon:#FFF6EA;--ink:#22304F;--sun:#FFD23F;--path:#F7C88C;--path-done:#FF8A65;
+        --grass:#6ED39E;--cloud:#fff;--mist:#8FA8C6;--coral:#FF6F59;--ok:#1F9E63;--disc-done:#FFF1EC}   /* overridden by the theme */
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none}
   html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none}
   body{font-family:"Fredoka","Nunito",system-ui,sans-serif;color:var(--ink);
-       background:linear-gradient(180deg,var(--sky),var(--dawn) 65%,#FFF6EA);
+       background:linear-gradient(180deg,var(--sky),var(--dawn) 65%,var(--horizon));transition:background .6s;
        display:flex;flex-direction:column;height:100vh;cursor:none}
   body.mouse{cursor:auto}
   header{text-align:center;padding:10px 12px 0;line-height:1.15}
@@ -28,7 +28,7 @@
   .station.late text.tm{fill:#E5793A}
   .station .disc{fill:var(--cloud);stroke:var(--path);stroke-width:6;transition:.4s}
   .station .hit{fill:transparent}
-  .station.done .disc{stroke:var(--path-done);fill:#FFF1EC}
+  .station.done .disc{stroke:var(--path-done);fill:var(--disc-done)}
   .station.skip .disc{stroke-dasharray:8 8;opacity:.7}
   .station .icon{font-size:38px;text-anchor:middle;filter:grayscale(1);opacity:.45;transition:.4s}
   .station.done .icon{filter:none;opacity:1}
@@ -41,19 +41,21 @@
   .win .flag{transform-box:fill-box;transform-origin:left center;animation:wave .8s ease-in-out infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
   .rays{transform-box:fill-box;transform-origin:center;opacity:0;transition:opacity .6s}
+  #skyBody text{text-anchor:middle;dominant-baseline:central}
+  #deco text{text-anchor:middle}
   .win .rays{opacity:.9;animation:spin 14s linear infinite}
   .msg{text-align:center;font-size:1.35rem;font-weight:600;margin:0 12px;min-height:1.5em;line-height:1.5}
   .msg b{color:var(--coral)}
   .win .msg b{color:var(--ok)}
   .bottom{display:flex;align-items:center;gap:14px;padding:6px 14px 12px}
   .week{flex:1;display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-  .day{background:rgba(255,255,255,.55);border-radius:16px;padding:6px 2px 4px;text-align:center;line-height:1.2}
+  .day{background:rgba(255,255,255,.6);color:#22304F;border-radius:16px;padding:6px 2px 4px;text-align:center;line-height:1.2}  /* fixed ink: readable on dark themes */
   .day .wd{font-size:.8rem;font-weight:600;opacity:.7}
   .day .star{font-size:1.45rem;filter:grayscale(1);opacity:.3;line-height:1.25}
   .day.full .star{filter:none;opacity:1}
   .day.today{outline:3px solid var(--sun)}
   .day.future{opacity:.4}
-  .day .cnt{font-size:.7rem;color:var(--mist);min-height:1em}
+  .day .cnt{font-size:.7rem;color:#7d8da6;min-height:1em}
   .streak{text-align:center;font-size:.85rem;line-height:1.1;min-width:96px;opacity:.85}
   .streak b{display:block;font-size:2rem;color:var(--coral);line-height:1.1}
   @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
@@ -80,12 +82,13 @@
       <path transform="rotate(45)" d="M0 -70 L8 -40 L-8 -40 Z"/><path transform="rotate(135)" d="M0 -70 L8 -40 L-8 -40 Z"/>
       <path transform="rotate(225)" d="M0 -70 L8 -40 L-8 -40 Z"/><path transform="rotate(315)" d="M0 -70 L8 -40 L-8 -40 Z"/>
     </g>
-    <circle r="34" fill="var(--sun)"/>
+    <g id="skyBody"><circle r="34" fill="var(--sun)"/></g>
   </g>
-  <g fill="#fff" opacity=".9">
+  <g id="clouds" fill="var(--cloud)" opacity=".9">
     <ellipse cx="150" cy="60" rx="46" ry="18"/><ellipse cx="180" cy="50" rx="30" ry="18"/>
     <ellipse cx="560" cy="45" rx="40" ry="16"/><ellipse cx="585" cy="36" rx="26" ry="16"/>
   </g>
+  <g id="deco"></g>
   <rect x="0" y="250" width="1000" height="88" fill="var(--grass)"/>
   <path id="road" d="M60 230 C 200 150, 260 150, 320 220 S 480 300, 560 210 S 720 130, 800 210 S 900 260, 940 200"
         fill="none" stroke="var(--path)" stroke-width="18" stroke-linecap="round"/>
@@ -100,17 +103,7 @@
   <g id="stations"></g>
   <g class="tick" id="ticks"></g>
   <g id="rider" class="rider">
-    <g class="body" transform="translate(-40,-70)">
-      <ellipse cx="34" cy="80" rx="8" ry="5" fill="rgba(0,0,0,.12)"/>
-      <rect x="14" y="52" width="8" height="24" rx="4" fill="#fff"/><rect x="38" y="52" width="8" height="24" rx="4" fill="#fff"/>
-      <ellipse cx="30" cy="48" rx="26" ry="17" fill="#fff"/>
-      <path d="M6 44 C -10 34, -8 60, 6 56" fill="var(--mane)"/>
-      <ellipse cx="54" cy="30" rx="15" ry="13" fill="#fff"/>
-      <ellipse cx="66" cy="34" rx="8" ry="6" fill="#FFD9E8"/>
-      <circle cx="56" cy="27" r="2.6" fill="var(--ink)"/>
-      <path d="M40 22 C 38 6, 56 8, 52 20 C 60 4, 72 14, 62 24" fill="var(--mane2)"/>
-      <path d="M50 18 L54 -2 L58 18 Z" fill="var(--sun)"/>
-    </g>
+    <g class="body" id="riderBody" transform="translate(-40,-70)"></g>
   </g>
 </svg>
 
@@ -125,7 +118,43 @@
 <script>
 const TASKS=[{id:"wake",name:"Réveil",icon:"☀️",at:.06},{id:"clothes",name:"Habits",icon:"👕",at:.32},
              {id:"breakfast",name:"Déjeuner",icon:"🥣",at:.60},{id:"teeth",name:"Dents",icon:"🪥",at:.86}];
-const MSGS=["En selle, c'est parti !","Super départ !","À mi-chemin !","Presque au drapeau…","Tu as réussi ! 🎉"];
+// ---- theme (static/themes/<id>.json); defaults = the unicorn theme so the page works even if a theme file is missing
+const DEFAULT_THEME={colors:{},texts:{title:"En route pour l'école, Romane !",subtitle:"Quatre étapes, puis le drapeau. Tu y arrives avant {goal} ?",
+  msgs:["En selle, c'est parti !","Super départ !","À mi-chemin !","Presque au drapeau…","Tu as réussi ! 🎉"],
+  win:"Arrivée à {time}, avant {goal} ! 🎉 Bravo Romane !",late:"Arrivée à {time}. Demain avant {goal} ?"},
+  icons:{},sky:{type:"sun"},clouds:true,decor:[],confetti:["🌟","⭐","🦄","🎉","✨"],
+  rider:'<rect x="14" y="52" width="8" height="24" rx="4" fill="#fff"/><rect x="38" y="52" width="8" height="24" rx="4" fill="#fff"/><ellipse cx="30" cy="48" rx="26" ry="17" fill="#fff"/><path d="M6 44 C -10 34, -8 60, 6 56" fill="#C58BFF"/><ellipse cx="54" cy="30" rx="15" ry="13" fill="#fff"/><ellipse cx="66" cy="34" rx="8" ry="6" fill="#FFD9E8"/><circle cx="56" cy="27" r="2.6" fill="#22304F"/><path d="M40 22 C 38 6, 56 8, 52 20 C 60 4, 72 14, 62 24" fill="#7DD8FF"/><path d="M50 18 L54 -2 L58 18 Z" fill="#FFD23F"/>'};
+let THEME=DEFAULT_THEME, themeId=null;
+const PREVIEW_THEME=new URLSearchParams(location.search).get("theme");   // /?theme=x previews without changing the setting
+const CSSVAR={sky:"--sky",dawn:"--dawn",horizon:"--horizon",ground:"--grass",path:"--path",pathDone:"--path-done",ink:"--ink",
+              cloud:"--cloud",mist:"--mist",accent:"--coral",ok:"--ok",sun:"--sun",discDone:"--disc-done"};
+function applyTheme(t){
+  THEME={...DEFAULT_THEME,...t,texts:{...DEFAULT_THEME.texts,...(t.texts||{})}};
+  const root=document.documentElement.style;
+  for(const k in CSSVAR) root.removeProperty(CSSVAR[k]);
+  for(const k in (t.colors||{})) if(CSSVAR[k]) root.setProperty(CSSVAR[k],t.colors[k]);
+  document.title=THEME.texts.title.replace(/&nbsp;/g," ");
+  document.querySelector("h1").textContent=THEME.texts.title;
+  $("riderBody").innerHTML=THEME.rider;
+  $("clouds").style.display=THEME.clouds===false?"none":"";
+  const sb=$("skyBody"); sb.innerHTML="";
+  if(THEME.sky.type==="sun") sb.innerHTML='<circle r="34" fill="var(--sun)"/>';
+  else if(THEME.sky.type==="emoji"){const tx=document.createElementNS(NS,"text");tx.setAttribute("font-size",THEME.sky.size||56);tx.textContent=THEME.sky.emoji;sb.appendChild(tx);}
+  const de=$("deco"); de.innerHTML="";
+  (THEME.decor||[]).forEach(d=>{
+    if(d.emoji){const tx=document.createElementNS(NS,"text");tx.setAttribute("x",d.x);tx.setAttribute("y",d.y);tx.setAttribute("font-size",d.size||24);tx.textContent=d.emoji;de.appendChild(tx);}
+    else if(d.circle){const c=document.createElementNS(NS,"circle");c.setAttribute("cx",d.x);c.setAttribute("cy",d.y);c.setAttribute("r",d.r||2);c.setAttribute("fill",d.fill||"#fff");de.appendChild(c);}
+    else if(d.rect){const r=document.createElementNS(NS,"rect");r.setAttribute("x",d.x);r.setAttribute("y",d.y);r.setAttribute("width",d.w);r.setAttribute("height",d.h);r.setAttribute("fill",d.fill||"#fff");de.appendChild(r);}
+  });
+  TASKS.forEach(task=>{const g=$("st-"+task.id); if(g) g.querySelector(".icon").textContent=(THEME.icons||{})[task.id]||task.icon;});
+  if(state.tasks&&Object.keys(state.tasks).length) renderToday(state);
+}
+async function loadTheme(id){
+  if(!id||id===themeId) return;
+  themeId=id;
+  try{const t=await fetch(`/static/themes/${encodeURIComponent(id)}.json`,{cache:"no-store"}).then(r=>{if(!r.ok)throw 0;return r.json();}); applyTheme(t);}
+  catch(e){applyTheme(DEFAULT_THEME);}
+}
 const DAYS=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
 const fr=t=>t?t.replace(/^0/,"").replace(":","h"):"";
 const road=document.getElementById("road"), L=road.getTotalLength();
@@ -180,11 +209,11 @@ function renderToday(t){
   });
   $("tk-goal").textContent=fr(t.goal);
   $("goalTxt").textContent=fr(t.goal); $("flagTxt").textContent=fr(t.goal);
+  document.querySelector("header p").innerHTML=THEME.texts.subtitle.replace("{goal}",`<span id="goalTxt">${fr(t.goal)}</span>`);
   document.body.classList.toggle("win",t.complete&&t.on_time);
-  const m=$("msg");
-  if(t.complete) m.innerHTML=t.on_time?`Arrivée à <b>${fr(t.finished_at)}</b>, avant ${fr(t.goal)} ! 🎉 Bravo Romane !`
-                                     :`Arrivée à <b>${fr(t.finished_at)}</b>. Demain avant ${fr(t.goal)} ?`;
-  else m.textContent=MSGS[Math.min(n,MSGS.length-1)];
+  const m=$("msg"), fill=x=>x.replace("{time}",`<b>${fr(t.finished_at)}</b>`).replace("{goal}",fr(t.goal));
+  if(t.complete) m.innerHTML=fill(t.on_time?THEME.texts.win:THEME.texts.late);
+  else m.textContent=THEME.texts.msgs[Math.min(n,THEME.texts.msgs.length-1)];
   if(wasComplete===false&&t.complete) confetti();
   wasComplete=t.complete;
 }
@@ -201,7 +230,7 @@ function renderWeek(w){
   s.textContent=w.streak;
 }
 function confetti(){
-  const em=["🌟","⭐","🦄","🎉","✨"];
+  const em=THEME.confetti||["🌟","⭐","🎉"];
   for(let i=0;i<24;i++){const e=document.createElement("span");e.className="conf";e.textContent=em[i%em.length];
     e.style.left=Math.random()*100+"vw";e.style.animationDuration=(2+Math.random()*2)+"s";e.style.animationDelay=(Math.random()*.8)+"s";
     document.body.appendChild(e);setTimeout(()=>e.remove(),5000);}
@@ -209,6 +238,7 @@ function confetti(){
 
 let lastDay=null, loadedVersion=null;
 function checkVersion(t){
+  loadTheme(PREVIEW_THEME||t.theme||"licorne");
   if(!t.version)return;
   if(loadedVersion===null)loadedVersion=t.version;
   else if(t.version!==loadedVersion)location.reload();   // new deployment: pick up the new page
