@@ -4,6 +4,8 @@ After=network-online.target
 
 [Service]
 Type=oneshot
+# the deployer may relaunch the kiosk browser: keep those children alive when the one-shot ends
+KillMode=process
 User=__USER__
 Environment=HOME=__HOME__
 ExecStart=__HOME__/gmr/deploy/autodeploy.sh --force
