@@ -40,7 +40,7 @@ when the version changes, so **push to `main` and the screen updates within ~5 m
 The admin page shows the running version and the deploy log, and has an "update now" button
 (`POST /api/deploy` -> `systemctl start gmr-deploy-now.service`, via a NOPASSWD sudoers rule installed by `install.sh`).
 
-Manual: `ssh damien@192.168.68.75 'systemctl start gmr-deploy-now.service; tail ~/gmr-data/deploy.log'`
+Manual: `ssh damien@192.168.68.75 'sudo systemctl start gmr-deploy-now.service; tail ~/gmr-data/deploy.log'`
 
 ## API
     POST /event          {"task":"wake|clothes|breakfast|teeth","action":"done|undo|skip"}

@@ -2,6 +2,10 @@
 # Launches Chromium full-screen on the GMR page. Waits for the server first.
 # --once : run the browser a single time (systemd/cage restarts it); default: loop forever (desktop autostart).
 URL="${GMR_URL:-http://127.0.0.1:8000}"
+LOGF="${GMR_DATA:-$HOME/gmr-data}/kiosk.log"; mkdir -p "$(dirname "$LOGF")"
+# keep the log short: truncate at each script start, then log every browser launch/exit
+{ echo "=== kiosk.sh start $(date '+%F %T')  uptime=$(cut -d' ' -f1 /proc/uptime)s  WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-}  DISPLAY=${DISPLAY:-}  XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-}  XDG_SESSION_TYPE=${XDG_SESSION_TYPE:-}"; } > "$LOGF"
+exec 2>>"$LOGF"
 # Prefer the real binary over the /usr/bin/chromium wrapper: Raspberry Pi OS's wrapper injects
 # --force-renderer-accessibility, --enable-gpu-rasterization, --use-angle=gles, remote extensions...
 # which cost memory and paint a grey window on a Pi 4 under Wayland.
@@ -16,7 +20,8 @@ for i in $(seq 1 60); do
 done
 # Let the compositor settle (output mode/rotation applied by kanshi or wlr-randr). Chromium started while the
 # output is being reconfigured under Wayland ends up with a window that never paints (grey screen at boot).
-sleep "${GMR_KIOSK_DELAY:-8}"
+sleep "${GMR_KIOSK_DELAY:-20}"
+command -v wlr-randr >/dev/null && wlr-randr >>"$LOGF" 2>&1
 
 FLAGS=(
   --kiosk "$URL"
@@ -33,10 +38,13 @@ FLAGS=(
 )
 [ -n "$WAYLAND_DISPLAY" ] && FLAGS+=(--ozone-platform=wayland)
 
-if [ "$1" = "--once" ]; then
-  exec "$BROWSER" "${FLAGS[@]}"
+if [ "${1:-}" = "--once" ]; then
+  echo "launch $(date '+%T') $BROWSER" >>"$LOGF"
+  exec "$BROWSER" "${FLAGS[@]}" >>"$LOGF" 2>&1
 fi
 while true; do
-  "$BROWSER" "${FLAGS[@]}"
+  echo "launch $(date '+%T') $BROWSER" >>"$LOGF"
+  "$BROWSER" "${FLAGS[@]}" >>"$LOGF" 2>&1
+  echo "browser exited rc=$? $(date '+%T')" >>"$LOGF"
   sleep 2
 done
