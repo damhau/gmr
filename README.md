@@ -18,20 +18,36 @@ the flag is 7h30. Steps are checked off by Flic buttons (webhooks) or by tapping
     curl -X POST localhost:8000/event -H 'Content-Type: application/json' -d '{"task":"wake"}'
 
 ## Deploy to the Pi
-    ssh damien@192.168.68.75 'mkdir -p ~/gmr'
-    scp -r app deploy damien@192.168.68.75:~/gmr/
-    ssh damien@192.168.68.75 'bash ~/gmr/deploy/install.sh'
+First time only:
 
-`install.sh` installs `gmr.service`, downloads the Fredoka font, and registers Chromium in
-kiosk mode at boot (labwc / wayfire / X11 autostart, or cage on tty1 on Pi OS Lite).
+    ssh damien@192.168.68.75
+    git clone https://github.com/damhau/gmr.git ~/gmr && bash ~/gmr/deploy/install.sh
 
-Update later: re-run the `scp` line and `ssh damien@192.168.68.75 'sudo systemctl restart gmr'`.
+`install.sh` installs `gmr.service` (state in `~/gmr-data`: database, buttons.json, settings.json),
+downloads the Fredoka font, registers Chromium in kiosk mode at boot (labwc / wayfire / X11 autostart,
+or cage on tty1 on Pi OS Lite) and enables the auto-deployer.
+
+### Updates are automatic
+`gmr-deploy.timer` runs `deploy/autodeploy.sh` every 5 minutes (never between 06:00 and 08:00):
+
+1. `git fetch`; nothing to do if the Pi already runs `origin/main`.
+2. `git reset --hard origin/main`, re-run `install.sh` if anything under `deploy/` changed.
+3. `systemctl restart gmr`, then poll `/health` for 20 s.
+4. If unhealthy: reset to the previous commit, restart again, log it.
+
+The server includes its version (git commit) in every SSE "today" message; the kiosk page reloads itself
+when the version changes, so **push to `main` and the screen updates within ~5 minutes**.
+The admin page shows the running version and the deploy log, and has an "update now" button
+(`POST /api/deploy` -> `systemctl start gmr-deploy-now.service`, via a NOPASSWD sudoers rule installed by `install.sh`).
+
+Manual: `ssh damien@192.168.68.75 'systemctl start gmr-deploy-now.service; tail ~/gmr-data/deploy.log'`
 
 ## API
     POST /event          {"task":"wake|clothes|breakfast|teeth","action":"done|undo|skip"}
                          (also accepts ?task=wake&action=done)
     GET  /api/today      today's state
     GET  /api/week?offset=0
+    GET  /api/version    running version + deploy log;  POST /api/deploy triggers a check now
     GET  /api/report?days=56     everything /report shows (max 730 days); /api/report.csv?days=56 for a spreadsheet
     GET  /api/stream     Server-Sent Events: "today" pushed on every change, plus "buttons" and "settings"
     GET  /health

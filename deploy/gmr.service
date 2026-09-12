@@ -7,6 +7,10 @@ Type=simple
 User=__USER__
 WorkingDirectory=__HOME__/gmr/app
 Environment=PYTHONUNBUFFERED=1
+Environment=GMR_DATA=__HOME__/gmr-data
+Environment=GMR_DB=__HOME__/gmr-data/morning.db
+Environment=GMR_BUTTONS=__HOME__/gmr-data/buttons.json
+Environment=GMR_SETTINGS=__HOME__/gmr-data/settings.json
 # Environment=GMR_GOAL=07:30
 # Environment=GMR_TASKS=wake,clothes,breakfast,teeth
 ExecStart=/usr/bin/python3 __HOME__/gmr/app/server.py

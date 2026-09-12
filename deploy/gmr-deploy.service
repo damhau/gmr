@@ -1,0 +1,10 @@
+[Unit]
+Description=GMR auto-deploy: pull latest commit from GitHub if any (scheduled, quiet 06:00-08:00)
+After=network-online.target gmr.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=__USER__
+Environment=HOME=__HOME__
+ExecStart=__HOME__/gmr/deploy/autodeploy.sh --scheduled

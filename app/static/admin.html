@@ -82,6 +82,14 @@
   <h2>Aujourd'hui</h2>
   <div class="card" id="today" style="padding:12px 14px"></div>
 
+  <h2>Version</h2>
+  <div class="card" style="padding:12px 14px">
+    <div class="row"><span id="ver" class="meta">…</span>
+      <button id="deploy" title="Vérifie GitHub maintenant et installe la nouvelle version s'il y en a une">Mettre à jour maintenant</button>
+      <span class="status" id="deployStatus"></span></div>
+    <pre id="deployLog" style="margin:10px 0 0;font-size:.75rem;color:var(--mist);white-space:pre-wrap;max-height:160px;overflow:auto"></pre>
+  </div>
+
   <p class="sub" style="margin-top:28px">Clic = fait · double clic = annuler · appui long = passer. <a href="/report">Voir le bilan</a> · <a href="/">Retour à l'écran de Romane</a></p>
 </main>
 
@@ -172,6 +180,20 @@ function add(){
   $("newSerial").value=""; $("save").disabled=false;
 }
 
+let loadedVersion=null;
+async function loadVersion(){
+  try{const v=await fetch("/api/version",{cache:"no-store"}).then(r=>r.json());
+    $("ver").textContent=`Version ${v.version}`+(v.deployed_at?` · déployée le ${new Date(v.deployed_at).toLocaleString("fr-CH")}`:"")+` · serveur démarré ${new Date(v.started_at).toLocaleTimeString("fr-CH",{hour:"2-digit",minute:"2-digit"})}`;
+    $("deployLog").textContent=(v.log||[]).join("\n");
+    if(loadedVersion===null)loadedVersion=v.version; else if(v.version!==loadedVersion)location.reload();
+  }catch(e){}
+}
+async function deployNow(){
+  const st=$("deployStatus");st.textContent="Vérification…";st.className="status";
+  const r=await fetch("/api/deploy",{method:"POST"}).then(r=>r.json()).catch(()=>({ok:false,error:"serveur injoignable"}));
+  if(r.ok){st.textContent="Lancé. Le journal se met à jour dans quelques secondes.";st.className="status ok";setTimeout(loadVersion,5000);setTimeout(loadVersion,15000);setTimeout(loadVersion,30000);}
+  else{st.textContent="Impossible : "+(r.error||"?");st.className="status err";}
+}
 let timesDirty=false;
 function renderTimes(cfg){
   if(timesDirty)return;
@@ -206,15 +228,15 @@ function renderToday(t){
     `</div><div class="meta" style="margin-top:6px;color:var(--mist);font-size:.85rem">${t.done}/${t.total} · objectif ${fr(t.goal)} · il est ${fr(t.now)}</div>`;
 }
 
-$("save").onclick=save; $("add").onclick=add; $("saveTimes").onclick=saveTimes;
+$("save").onclick=save; $("add").onclick=add; $("saveTimes").onclick=saveTimes; $("deploy").onclick=deployNow;
 $("newSerial").addEventListener("keydown",e=>{if(e.key==="Enter")add();});
 const es=new EventSource("/api/stream");
 es.addEventListener("buttons",()=>load());
 es.addEventListener("today",e=>{const t=JSON.parse(e.data);renderToday(t);renderTimes({goal:t.goal,targets:t.targets});});
-es.onopen=()=>{$("dot").classList.add("on");load();};
+es.onopen=()=>{$("dot").classList.add("on");load();loadVersion();};
 es.onerror=()=>$("dot").classList.remove("on");
 setInterval(load,30000);   // fallback + refreshes the "il y a X s" texts
-load();
+load();loadVersion();
 </script>
 </body>
 </html>

@@ -1,0 +1,2 @@
+# Lets the GMR server (user __USER__) restart itself and trigger a deploy without a password.
+__USER__ ALL=(root) NOPASSWD: /usr/bin/systemctl restart gmr.service, /usr/bin/systemctl restart gmr-kiosk.service, /usr/bin/systemctl start --no-block gmr-deploy-now.service

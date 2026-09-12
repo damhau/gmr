@@ -3,3 +3,7 @@ app/morning.db-journal
 app/static/fonts/
 __pycache__/
 app/settings.json
+app/.claude/
+app/.mcp.json
+.idea/
+.vscode/

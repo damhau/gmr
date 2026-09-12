@@ -207,11 +207,17 @@ function confetti(){
     document.body.appendChild(e);setTimeout(()=>e.remove(),5000);}
 }
 
-let lastDay=null;
+let lastDay=null, loadedVersion=null;
+function checkVersion(t){
+  if(!t.version)return;
+  if(loadedVersion===null)loadedVersion=t.version;
+  else if(t.version!==loadedVersion)location.reload();   // new deployment: pick up the new page
+}
 async function refreshWeek(){
   const w=await fetch("/api/week",{cache:"no-store"}).then(r=>r.json()); renderWeek(w);
 }
 async function applyToday(t){
+  checkVersion(t);
   if(t.day!==lastDay||t.complete!==wasComplete) await refreshWeek();
   renderToday(t); lastDay=t.day;
 }

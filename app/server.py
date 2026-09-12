@@ -28,6 +28,7 @@ import os
 import re
 import queue
 import sqlite3
+import subprocess
 import sys
 import threading
 from datetime import date, datetime, timedelta
@@ -46,6 +47,48 @@ PORT = int(os.environ.get("GMR_PORT", "8000"))
 ACTIONS = ("done", "undo", "skip")
 BUTTONS_FILE = Path(os.environ.get("GMR_BUTTONS", HERE / "buttons.json"))
 SETTINGS_FILE = Path(os.environ.get("GMR_SETTINGS", HERE / "settings.json"))
+DATA_DIR = Path(os.environ.get("GMR_DATA", HERE))          # where the deployer writes VERSION / deploy.log
+STARTED_AT = datetime.now(ZoneInfo(os.environ.get("GMR_TZ", "Europe/Zurich"))).isoformat(timespec="seconds")
+
+
+def detect_version() -> str:
+    try:  # written by deploy/autodeploy.sh
+        v = (DATA_DIR / "VERSION").read_text().split()[0]
+        if v:
+            return v
+    except (FileNotFoundError, IndexError):
+        pass
+    try:
+        return subprocess.run(["git", "-C", str(HERE), "rev-parse", "--short", "HEAD"],
+                              capture_output=True, text=True, timeout=5).stdout.strip() or "dev"
+    except (OSError, subprocess.SubprocessError):
+        return "dev"
+
+
+VERSION = detect_version()
+
+
+def api_version() -> dict:
+    info = {"version": VERSION, "started_at": STARTED_AT, "deployed_at": None, "log": []}
+    try:
+        parts = (DATA_DIR / "VERSION").read_text().split()
+        info["deployed_at"] = parts[1] if len(parts) > 1 else None
+    except FileNotFoundError:
+        pass
+    try:
+        info["log"] = (DATA_DIR / "deploy.log").read_text().splitlines()[-12:]
+    except FileNotFoundError:
+        pass
+    return info
+
+
+def trigger_deploy() -> dict:
+    try:
+        r = subprocess.run(["sudo", "-n", "systemctl", "start", "--no-block", "gmr-deploy-now.service"],
+                           capture_output=True, text=True, timeout=10)
+        return {"ok": r.returncode == 0, "error": r.stderr.strip() or None}
+    except (OSError, subprocess.SubprocessError) as e:
+        return {"ok": False, "error": str(e)}
 DEFAULT_TARGETS = {"wake": "06:45", "clothes": "07:00", "breakfast": "07:10", "teeth": "07:20"}
 CLICK_ACTION = {"click": "done", "single": "done", "double": "undo", "hold": "skip"}
 # button names (as typed in the Flic app) that resolve to a task without buttons.json
@@ -437,7 +480,7 @@ def api_today() -> dict:
     cfg = settings()
     with db() as con:
         d = now().date()
-        return {"day": d.isoformat(), "goal": cfg["goal"], "targets": cfg["targets"],
+        return {"day": d.isoformat(), "goal": cfg["goal"], "targets": cfg["targets"], "version": VERSION,
                 "now": now().strftime("%H:%M"), **summarize(day_status(con, d), cfg["goal"])}
 
 
@@ -558,6 +601,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(api_buttons())
         if u.path == "/api/settings":
             return self.send_json(settings())
+        if u.path == "/api/version":
+            return self.send_json(api_version())
         if u.path.startswith("/static/"):
             target = (STATIC / u.path[len("/static/"):]).resolve()
             if STATIC.resolve() not in target.parents:
@@ -581,6 +626,9 @@ class Handler(BaseHTTPRequestHandler):
         if u.path == "/api/buttons":
             r = save_mapping(self.read_json().get("mapping"))
             return self.send_json(r, 200 if r["ok"] else 400)
+        if u.path == "/api/deploy":
+            r = trigger_deploy()
+            return self.send_json(r, 200 if r["ok"] else 500)
         if u.path == "/api/settings":
             r = save_settings(self.read_json())
             return self.send_json(r, 200 if r["ok"] else 400)
@@ -612,7 +660,7 @@ def main():
     db().close()  # create schema up front so errors show at startup
     srv = ThreadingHTTPServer(("0.0.0.0", PORT), Handler)
     srv.daemon_threads = True
-    print(f"gmr: serving on http://0.0.0.0:{PORT}  db={DB}  tz={TZ.key}  goal={GOAL_TIME}", flush=True)
+    print(f"gmr {VERSION}: serving on http://0.0.0.0:{PORT}  db={DB}  tz={TZ.key}  data={DATA_DIR}", flush=True)
     try:
         srv.serve_forever()
     except KeyboardInterrupt:
