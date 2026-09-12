@@ -7,6 +7,8 @@ the flag is 7h30. Steps are checked off by Flic buttons (webhooks) or by tapping
 ## Layout
 - `app/server.py` — zero-dependency backend (Python stdlib: http.server + sqlite3). Port 8000.
 - `app/static/index.html` — the UI, 800x480, French. Tap a stop = fait, hold 0.7 s = annuler. Live via SSE.
+- `app/static/report.html` — `/report`: review dashboard (KPIs, finish-time trend, weekly stacks, calendar, per-step and per-weekday stats, journal, CSV export). Inline SVG, no libraries.
+- `app/seed_demo.py` — fills a *separate* database with fake mornings to try `/report`: `GMR_DB=/tmp/demo.db python3 app/seed_demo.py --weeks 10`.
 - `app/static/admin.html` — `/admin`: map Flic buttons to steps, set step target times and the goal, simulate presses. LAN only, no auth.
 - `deploy/` — systemd units, kiosk launcher, `install.sh` (run on the Pi).
 - `mockup/` — original mockups from the design conversation.
@@ -30,6 +32,7 @@ Update later: re-run the `scp` line and `ssh damien@192.168.68.75 'sudo systemct
                          (also accepts ?task=wake&action=done)
     GET  /api/today      today's state
     GET  /api/week?offset=0
+    GET  /api/report?days=56     everything /report shows (max 730 days); /api/report.csv?days=56 for a spreadsheet
     GET  /api/stream     Server-Sent Events: "today" pushed on every change, plus "buttons" and "settings"
     GET  /health
     POST /hub-event      Flic Hub SDK payload (see below)

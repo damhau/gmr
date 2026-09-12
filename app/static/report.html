@@ -104,7 +104,7 @@
       <h2>Calendrier</h2>
       <p class="sub">Un carré par jour.</p>
       <div class="legend"><span><i class="k" style="background:var(--good)"></i>✓ à l'heure</span><span><i class="k" style="background:var(--serious)"></i>⚠ en retard</span><span><i class="k" style="background:var(--critical)"></i>✗ incomplet</span><span><i class="k" style="background:var(--seq-none)"></i>pas de routine</span></div>
-      <div id="cal"></div>
+      <div id="cal" style="overflow-x:auto"></div>
     </section>
   </div>
 
@@ -193,7 +193,7 @@ function renderKpis(){
   x=dRate(k.on_time_rate,p.on_time_rate);box.appendChild(tile(`Avant ${fr(R.goal)}`,pct(k.on_time_rate),x[0],x[1]));
   x=dTime(k.avg_finish,p.avg_finish);box.appendChild(tile("Arrivée moyenne",fr(k.avg_finish),x[0],x[1]));
   box.appendChild(tile("Jours d'affilée",String(k.current_streak),`record : ${k.best_streak}`));
-  x=dTime(k.avg_duration_min==null?null:hm(k.avg_duration_min),p.avg_duration_min==null?null:hm(p.avg_duration_min));
+  x=(k.avg_duration_min==null||p.avg_duration_min==null)?["",""]:(()=>{const d=k.avg_duration_min-p.avg_duration_min;return[`${d>0?"+":""}${d} min vs période précédente`,d===0?"":d<0?"up":"down"];})();
   box.appendChild(tile("Durée réveil → dents",dur(k.avg_duration_min),x[0],x[1]));
   box.appendChild(tile("Matins avec routine",`${k.active_days}`,`sur ${k.days_total} jours · ${k.missed_weekdays} jour${k.missed_weekdays>1?"s":""} de semaine sans`));
 }
@@ -260,8 +260,8 @@ function renderCal(){
   const box=$("cal");box.replaceChildren();
   const first=new Date(R.from+"T12:00:00"),offset=(first.getDay()+6)%7;
   const cols=Math.ceil((R.days.length+offset)/7);
-  const W=box.clientWidth||400,cell=Math.max(10,Math.min(18,Math.floor((W-24)/cols)-3)),gap=3,H=7*(cell+gap)+18;
-  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,height:H},box);
+  const avail=box.clientWidth||400,cell=Math.max(11,Math.min(18,Math.floor((avail-24)/cols)-3)),gap=3,H=7*(cell+gap)+18,W=Math.max(avail,24+cols*(cell+gap));
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,height:H},box);svg.style.width=W+"px";
   DAYS.forEach((d,i)=>{if(i%2===0)txt(svg,0,16+i*(cell+gap)+cell*0.75,d,{});});
   R.days.forEach((d,i)=>{
     const idx=i+offset,c=Math.floor(idx/7),r=idx%7,x=24+c*(cell+gap),y=16+r*(cell+gap),s=status(d);
