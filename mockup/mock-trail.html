@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Morning trail — mock</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--sky:#D6ECFF;--dawn:#FFE6CB;--ink:#22304F;--sun:#FFD23F;--path:#F7C88C;--path-done:#FF8A65;
+        --grass:#6ED39E;--cloud:#fff;--mist:#9DB6D3;--coral:#FF6F59;--mane:#C58BFF;--mane2:#7DD8FF}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Fredoka","Nunito",system-ui,sans-serif;color:var(--ink);
+       background:linear-gradient(180deg,var(--sky),var(--dawn) 65%,#FFF6EA);min-height:100vh}
+  header{text-align:center;padding:20px 16px 4px}
+  h1{margin:0;font-size:1.8rem;font-weight:700}
+  header p{margin:4px 0 0;opacity:.7}
+  .trail{width:100%;max-width:900px;margin:0 auto;display:block}
+  .station text.lbl{font-size:22px;font-weight:600;text-anchor:middle;fill:var(--ink)}
+  .station text.tm{font-size:17px;text-anchor:middle;fill:var(--mist)}
+  .station.done text.tm{fill:#1F9E63;font-weight:600}
+  .station .disc{fill:var(--cloud);stroke:var(--path);stroke-width:6;transition:.4s}
+  .station.done .disc{stroke:var(--path-done);fill:#FFF1EC}
+  .station .icon{font-size:38px;text-anchor:middle;filter:grayscale(1);opacity:.45;transition:.4s}
+  .station.done .icon{filter:none;opacity:1}
+  .tick text{font-size:15px;fill:var(--ink);opacity:.55;text-anchor:middle}
+  .rider{transition:transform .9s cubic-bezier(.4,1.35,.6,1)}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .rider .body{animation:bob 1.4s ease-in-out infinite}
+  .msg{text-align:center;font-size:1.25rem;font-weight:600;margin:8px 16px;min-height:1.6em}
+  .sim{max-width:640px;margin:14px auto 0;padding:0 16px;text-align:center}
+  .sim small{display:block;opacity:.55;margin-bottom:8px}
+  .sim button{font:inherit;font-weight:600;font-size:1rem;color:var(--ink);background:var(--cloud);
+    border:0;border-radius:22px;padding:12px 16px;margin:4px;cursor:pointer;box-shadow:0 5px 0 rgba(34,48,79,.12)}
+  .sim button:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(34,48,79,.12)}
+  .sim button.reset{background:transparent;box-shadow:none;text-decoration:underline;font-weight:400}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:520px;margin:26px auto 0;padding:0 16px}
+  .day{background:rgba(255,255,255,.55);border-radius:18px;padding:10px 4px;text-align:center}
+  .day .wd{font-size:.8rem;font-weight:600;opacity:.7}
+  .day .star{font-size:1.5rem;filter:grayscale(1);opacity:.3}
+  .day.full .star{filter:none;opacity:1}
+  .day.today{outline:3px solid var(--sun)}
+  .day.future{opacity:.4}
+  .streak{text-align:center;margin:18px 0 30px;font-size:1rem}
+  .streak b{display:block;font-size:2rem;color:var(--coral)}
+  @media (prefers-reduced-motion:reduce){.rider,.rider .body,.station *{transition:none;animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Ride to school, Luna!</h1>
+  <p>Four stops, then the flag. Can you get there before 7:30?</p>
+</header>
+
+<svg class="trail" viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" aria-label="Morning trail">
+  <!-- sky bits -->
+  <circle cx="930" cy="60" r="34" fill="var(--sun)"/>
+  <g fill="#fff" opacity=".9">
+    <ellipse cx="150" cy="60" rx="46" ry="18"/><ellipse cx="180" cy="50" rx="30" ry="18"/>
+    <ellipse cx="560" cy="45" rx="40" ry="16"/><ellipse cx="585" cy="36" rx="26" ry="16"/>
+  </g>
+  <!-- ground -->
+  <rect x="0" y="250" width="1000" height="110" fill="var(--grass)"/>
+  <!-- trail: base + progress -->
+  <path id="road" d="M60 230 C 200 150, 260 150, 320 220 S 480 300, 560 210 S 720 130, 800 210 S 900 260, 940 200"
+        fill="none" stroke="var(--path)" stroke-width="18" stroke-linecap="round"/>
+  <path id="prog" d="M60 230 C 200 150, 260 150, 320 220 S 480 300, 560 210 S 720 130, 800 210 S 900 260, 940 200"
+        fill="none" stroke="var(--path-done)" stroke-width="18" stroke-linecap="round" pathLength="1"
+        stroke-dasharray="0 1" style="transition:stroke-dasharray .9s"/>
+  <!-- goal flag -->
+  <g transform="translate(940,200)">
+    <line x1="0" y1="0" x2="0" y2="-90" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>
+    <path d="M0 -90 L58 -72 L0 -54 Z" fill="var(--coral)"/>
+    <text x="4" y="-100" font-size="16" fill="var(--ink)" font-weight="600">7:30</text>
+  </g>
+  <!-- stations (positions are on the road) -->
+  <g id="stations"></g>
+  <!-- clock ticks -->
+  <g class="tick">
+    <text x="60" y="290">6:45</text><text x="290" y="290">7:00</text>
+    <text x="520" y="290">7:10</text><text x="750" y="290">7:20</text><text x="940" y="290">7:30</text>
+  </g>
+  <!-- rider: unicorn (drawn from simple shapes) -->
+  <g id="rider" class="rider">
+    <g class="body" transform="translate(-40,-70)">
+      <ellipse cx="34" cy="80" rx="8" ry="5" fill="rgba(0,0,0,.12)"/>
+      <!-- legs -->
+      <rect x="14" y="52" width="8" height="24" rx="4" fill="#fff"/><rect x="38" y="52" width="8" height="24" rx="4" fill="#fff"/>
+      <!-- body -->
+      <ellipse cx="30" cy="48" rx="26" ry="17" fill="#fff"/>
+      <!-- tail -->
+      <path d="M6 44 C -10 34, -8 60, 6 56" fill="var(--mane)"/>
+      <!-- head -->
+      <ellipse cx="54" cy="30" rx="15" ry="13" fill="#fff"/>
+      <ellipse cx="66" cy="34" rx="8" ry="6" fill="#FFD9E8"/>
+      <circle cx="56" cy="27" r="2.6" fill="var(--ink)"/>
+      <!-- mane -->
+      <path d="M40 22 C 38 6, 56 8, 52 20 C 60 4, 72 14, 62 24" fill="var(--mane2)"/>
+      <!-- horn -->
+      <path d="M50 18 L54 -2 L58 18 Z" fill="var(--sun)"/>
+    </g>
+  </g>
+</svg>
+
+<p class="msg" id="msg"></p>
+
+<div class="sim">
+  <small>Mock: these stand in for the Flic buttons</small>
+  <button onclick="press('wake')">☀️ Wake up</button>
+  <button onclick="press('clothes')">👕 Clothes</button>
+  <button onclick="press('breakfast')">🥣 Breakfast</button>
+  <button onclick="press('teeth')">🪥 Teeth</button>
+  <button class="reset" onclick="reset()">start over</button>
+</div>
+
+<div class="week" id="week"></div>
+<div class="streak">Days in a row<b>3</b></div>
+
+<script>
+const TASKS=[{id:"wake",name:"Wake up",icon:"☀️",at:.06},{id:"clothes",name:"Clothes",icon:"👕",at:.32},
+             {id:"breakfast",name:"Breakfast",icon:"🥣",at:.60},{id:"teeth",name:"Teeth",icon:"🪥",at:.86}];
+const MSGS=["Hop on, let's go!","Great start!","Halfway down the trail!","Nearly at the flag…","You made it! 🎉"];
+const road=document.getElementById("road"), L=road.getTotalLength();
+const done={};
+const pt=f=>road.getPointAtLength(f*L);
+
+// draw stations
+const S=document.getElementById("stations");
+TASKS.forEach(t=>{
+  const p=pt(t.at);
+  const g=document.createElementNS("http://www.w3.org/2000/svg","g");
+  g.setAttribute("class","station"); g.id="st-"+t.id;
+  g.innerHTML=`<circle class="disc" cx="${p.x}" cy="${p.y}" r="34"/>
+    <text class="icon" x="${p.x}" y="${p.y+14}">${t.icon}</text>
+    <text class="lbl" x="${p.x}" y="${p.y+64}">${t.name}</text>
+    <text class="tm" x="${p.x}" y="${p.y+86}"></text>`;
+  S.appendChild(g);
+});
+
+function render(){
+  const n=Object.keys(done).length;
+  const f=n? TASKS[n-1].at : 0;      // rider stands at the last completed stop
+  const p=pt(f);
+  document.getElementById("rider").style.transform=`translate(${p.x}px,${p.y}px)`;
+  document.getElementById("prog").style.strokeDasharray=`${f} 1`;
+  document.getElementById("msg").textContent=MSGS[n];
+  TASKS.forEach(t=>{
+    const g=document.getElementById("st-"+t.id);
+    g.classList.toggle("done",!!done[t.id]);
+    g.querySelector(".tm").textContent=done[t.id]||"";
+  });
+}
+function press(id){
+  if(done[id]) return;
+  // mock time: 6:48 + 9 min per step
+  const n=Object.keys(done).length, m=48+n*9;
+  done[id]=`${6+Math.floor(m/60)}:${String(m%60).padStart(2,"0")}`;
+  render();
+}
+function reset(){for(const k in done)delete done[k];render();}
+
+// mock week
+const W=document.getElementById("week");
+[["Mon",1,1],["Tue",1,0],["Wed",1,1],["Thu",0,0],["Fri",0,0],["Sat",0,0],["Sun",0,0]].forEach(([d,full,ontime],i)=>{
+  const e=document.createElement("div");
+  e.className="day"+(full?" full":"")+(i===3?" today":"")+(i>3?" future":"");
+  e.innerHTML=`<div class="wd">${d}</div><div class="star">${ontime?"🌟":"⭐"}</div>`;
+  W.appendChild(e);
+});
+render();
+</script>
+</body>
+</html>

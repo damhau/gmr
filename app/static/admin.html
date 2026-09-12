@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GMR · Boutons</title>
+<style>
+  :root{--ink:#22304F;--mist:#8FA8C6;--coral:#FF6F59;--ok:#1F9E63;--bg:#F4F7FB;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+  main{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+  h1{font-size:1.4rem;margin:0 0 4px}
+  h2{font-size:1rem;margin:28px 0 8px;text-transform:uppercase;letter-spacing:.04em;opacity:.7}
+  .sub{margin:0 0 18px;opacity:.7;font-size:.95rem}
+  .card{background:var(--card);border-radius:14px;padding:6px 14px;box-shadow:0 2px 8px rgba(34,48,79,.08)}
+  table{width:100%;border-collapse:collapse}
+  th,td{text-align:left;padding:10px 6px;border-bottom:1px solid #EEF2F7;vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  th{font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;opacity:.6;font-weight:600}
+  td.serial{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.95rem;white-space:nowrap}
+  td.meta{font-size:.85rem;color:var(--mist);white-space:nowrap}
+  select,input,button{font:inherit;padding:8px 10px;border-radius:9px;border:1px solid #D5DEEA;background:#fff;color:var(--ink)}
+  select{min-width:150px}
+  button{cursor:pointer}
+  button.primary{background:var(--ink);color:#fff;border-color:var(--ink);padding:10px 18px;font-weight:600}
+  button.primary:disabled{opacity:.4;cursor:default}
+  button.ghost{background:transparent;border-color:transparent;color:var(--mist);padding:6px 8px}
+  button.ghost:hover{color:var(--coral)}
+  .bar{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+  .status{font-size:.9rem;min-height:1.2em}
+  .status.ok{color:var(--ok)} .status.err{color:var(--coral)}
+  .fresh td{animation:flash 2s}
+  @keyframes flash{from{background:#FFF1EC}to{background:transparent}}
+  .empty{padding:18px 6px;color:var(--mist);text-align:center}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .sim button{border-radius:20px}
+  .tf{display:flex;flex-direction:column;gap:4px;font-size:.85rem}
+  .tf input{width:120px}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mist);margin-right:6px;vertical-align:middle}
+  .dot.on{background:var(--ok)}
+  code{background:#EEF2F7;padding:2px 6px;border-radius:6px;font-size:.9em}
+  a{color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Boutons Flic</h1>
+  <p class="sub"><span class="dot" id="dot"></span>Appuie sur un bouton : il apparaît ici en quelques secondes. Choisis son étape, puis Enregistrer.
+     Fichier : <code id="file">buttons.json</code></p>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>Numéro de série</th><th>Étape</th><th>Dernier appui</th><th></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div class="bar">
+    <button class="primary" id="save" disabled>Enregistrer</button>
+    <div class="row">
+      <input id="newSerial" placeholder="Ajouter un numéro de série…" size="18">
+      <select id="newTask"></select>
+      <button id="add">Ajouter</button>
+    </div>
+    <span class="status" id="status"></span>
+  </div>
+
+  <h2>Horaires</h2>
+  <div class="card" style="padding:12px 14px">
+    <div class="row" id="times"></div>
+    <div class="bar" style="margin-top:12px">
+      <button class="primary" id="saveTimes" disabled>Enregistrer les horaires</button>
+      <span class="status" id="timesStatus"></span>
+    </div>
+    <p class="sub" style="margin:10px 0 0;font-size:.85rem">Heure cible de chaque étape, affichée sous le sentier. Le drapeau est l'objectif final :
+      tout fini avant cette heure = étoile dorée. Laisse vide pour ne pas afficher d'heure.</p>
+  </div>
+
+  <h2>Tester sans bouton</h2>
+  <div class="card sim" id="sim" style="padding:12px 14px"></div>
+
+  <h2>Aujourd'hui</h2>
+  <div class="card" id="today" style="padding:12px 14px"></div>
+
+  <p class="sub" style="margin-top:28px">Clic = fait · double clic = annuler · appui long = passer. <a href="/">Retour à l'écran de Romane</a></p>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const LABELS={wake:"☀️ Réveil",clothes:"👕 Habits",breakfast:"🥣 Déjeuner",teeth:"🪥 Dents"};
+let TASKS=[], mapping={}, seen=[], dirty=false, lastSerials="";
+
+const ago=iso=>{if(!iso)return"";const s=(Date.now()-new Date(iso))/1000;
+  if(s<5)return"à l'instant";if(s<60)return`il y a ${s|0} s`;if(s<3600)return`il y a ${s/60|0} min`;
+  const d=new Date(iso);return d.toLocaleDateString("fr-CH",{day:"numeric",month:"short"})+" "+d.toLocaleTimeString("fr-CH",{hour:"2-digit",minute:"2-digit"});};
+const clickFr={click:"clic",single:"clic",double:"double clic",hold:"appui long"};
+
+function options(sel,val){
+  sel.innerHTML=`<option value="">— non assigné —</option>`+TASKS.map(t=>`<option value="${t}">${LABELS[t]||t}</option>`).join("");
+  sel.value=val||"";
+}
+
+const lastPresses={};
+const seenTxt=b=>b.last_seen?ago(b.last_seen)+" · "+(clickFr[b.last_click]||b.last_click)+" · "+b.presses+"×":"jamais";
+function render(){
+  // one row per serial: everything seen + everything in the mapping file
+  const bySerial={};
+  seen.forEach(b=>bySerial[b.serial.toLowerCase()]={serial:b.serial,...b});
+  Object.keys(mapping).forEach(k=>{if(!bySerial[k])bySerial[k]={serial:k,name:"",last_seen:null,last_click:null,presses:0};});
+  const list=Object.values(bySerial);  // server order = first seen; never reshuffled by presses
+  const serials=list.map(b=>b.serial).join(",");
+  const tb=$("rows");
+  if(serials!==lastSerials){            // rows only rebuilt when a button appears or disappears
+    const prev={}; tb.querySelectorAll("select").forEach(s=>prev[s.dataset.serial.toLowerCase()]=s.value);
+    tb.innerHTML="";
+    if(!list.length){tb.innerHTML=`<tr><td colspan="4" class="empty">Aucun bouton vu pour l'instant. Appuie sur un bouton Flic.</td></tr>`;}
+    list.forEach(b=>{
+      const key=b.serial.toLowerCase();
+      const tr=document.createElement("tr"); tr.dataset.key=key;
+      tr.innerHTML=`<td class="serial">${b.serial}${b.name?`<div class="meta">${b.name}</div>`:""}</td>
+        <td><select data-serial="${b.serial}"></select></td>
+        <td class="meta" data-seen>${seenTxt(b)}</td>
+        <td><button class="ghost" title="Oublier ce bouton" data-forget="${b.serial}">✕</button></td>`;
+      const sel=tr.querySelector("select");
+      options(sel, dirty&&key in prev?prev[key]:(mapping[key]||""));
+      sel.onchange=()=>{dirty=true;$("save").disabled=false;setStatus("");};
+      tr.querySelector("[data-forget]").onclick=()=>forget(b.serial);
+      tb.appendChild(tr);
+      lastPresses[key]=b.presses;
+    });
+    lastSerials=serials;
+    return;
+  }
+  list.forEach(b=>{                      // otherwise update in place; flash once per new press
+    const key=b.serial.toLowerCase(), tr=tb.querySelector(`tr[data-key="${key}"]`); if(!tr)return;
+    tr.querySelector("[data-seen]").textContent=seenTxt(b);
+    if(!dirty){const sel=tr.querySelector("select"); if(sel.value!==(mapping[key]||""))sel.value=mapping[key]||"";}
+    if(b.presses>(lastPresses[key]??b.presses)){tr.classList.remove("fresh");void tr.offsetWidth;tr.classList.add("fresh");}
+    lastPresses[key]=b.presses;
+  });
+}
+
+function setStatus(t,cls){const s=$("status");s.textContent=t;s.className="status "+(cls||"");}
+
+async function load(){
+  try{
+    const d=await fetch("/api/buttons",{cache:"no-store"}).then(r=>r.json());
+    if(!TASKS.length){TASKS=d.tasks;options($("newTask"),"");renderSim();}
+    mapping=d.mapping; seen=d.seen; $("file").textContent=d.mapping_file;
+    render(); $("dot").classList.add("on");
+    const t=await fetch("/api/today",{cache:"no-store"}).then(r=>r.json()); renderToday(t);
+    renderTimes({goal:t.goal,targets:t.targets});
+  }catch(e){$("dot").classList.remove("on");}
+}
+
+async function save(){
+  const m={}; document.querySelectorAll("#rows select").forEach(s=>{m[s.dataset.serial]=s.value;});
+  const r=await fetch("/api/buttons",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mapping:m})}).then(r=>r.json());
+  if(r.ok){dirty=false;$("save").disabled=true;setStatus("Enregistré ✓","ok");load();}
+  else setStatus(r.error||"Erreur","err");
+}
+async function forget(serial){
+  if(!confirm(`Oublier le bouton ${serial} ?`))return;
+  await fetch("/api/buttons/forget",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({serial})});
+  dirty=false;$("save").disabled=true;load();
+}
+function add(){
+  const s=$("newSerial").value.trim(); if(!s)return;
+  seen.push({serial:s,name:"",last_seen:null,last_click:null,presses:0});
+  dirty=true; render();
+  const sel=document.querySelector(`#rows select[data-serial="${s}"]`); if(sel)sel.value=$("newTask").value;
+  $("newSerial").value=""; $("save").disabled=false;
+}
+
+let timesDirty=false;
+function renderTimes(cfg){
+  if(timesDirty)return;
+  $("times").innerHTML=TASKS.map(t=>`<label class="tf">${LABELS[t]||t}<input type="time" data-target="${t}" value="${cfg.targets[t]||""}"></label>`).join("")+
+    `<label class="tf">🚩 Objectif<input type="time" data-goal value="${cfg.goal}" required></label>`;
+  $("times").querySelectorAll("input").forEach(i=>i.oninput=()=>{timesDirty=true;$("saveTimes").disabled=false;});
+}
+async function saveTimes(){
+  const targets={}; $("times").querySelectorAll("[data-target]").forEach(i=>targets[i.dataset.target]=i.value);
+  const goal=$("times").querySelector("[data-goal]").value;
+  const st=$("timesStatus");
+  if(!goal){st.textContent="L'objectif est obligatoire";st.className="status err";return;}
+  const r=await fetch("/api/settings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({goal,targets})}).then(r=>r.json());
+  if(r.ok){timesDirty=false;$("saveTimes").disabled=true;st.textContent="Enregistré ✓";st.className="status ok";renderTimes(r);}
+  else{st.textContent=r.error||"Erreur";st.className="status err";}
+}
+function renderSim(){
+  $("sim").innerHTML=`<div class="row">`+TASKS.map(t=>`<button data-sim="${t}">${LABELS[t]||t}</button>`).join("")+
+    `<button data-sim="__undo" class="ghost">Tout annuler</button></div>`;
+  $("sim").querySelectorAll("[data-sim]").forEach(b=>b.onclick=async()=>{
+    const t=b.dataset.sim;
+    if(t==="__undo"){for(const x of TASKS)await post("/event",{task:x,action:"undo"});}
+    else await post("/event",{task:t,action:"done"});
+    load();
+  });
+}
+const post=(u,b)=>fetch(u,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});
+function renderToday(t){
+  const fr=x=>x?x.replace(/^0/,"").replace(":","h"):"";
+  $("today").innerHTML=`<div class="row">`+TASKS.map(k=>{const s=t.tasks[k];
+    return `<span>${LABELS[k]||k} : <b>${s.state==="done"?"fait "+fr(s.time):s.state==="skip"?"passé":"à faire"}</b></span>`;}).join(" · ")+
+    `</div><div class="meta" style="margin-top:6px;color:var(--mist);font-size:.85rem">${t.done}/${t.total} · objectif ${fr(t.goal)} · il est ${fr(t.now)}</div>`;
+}
+
+$("save").onclick=save; $("add").onclick=add; $("saveTimes").onclick=saveTimes;
+$("newSerial").addEventListener("keydown",e=>{if(e.key==="Enter")add();});
+const es=new EventSource("/api/stream");
+es.addEventListener("buttons",()=>load());
+es.addEventListener("today",e=>{const t=JSON.parse(e.data);renderToday(t);renderTimes({goal:t.goal,targets:t.targets});});
+es.onopen=()=>{$("dot").classList.add("on");load();};
+es.onerror=()=>$("dot").classList.remove("on");
+setInterval(load,30000);   // fallback + refreshes the "il y a X s" texts
+load();
+</script>
+</body>
+</html>

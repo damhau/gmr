@@ -1,0 +1,23 @@
+# Used only when the Pi has NO desktop (Raspberry Pi OS Lite): cage + chromium on tty1.
+[Unit]
+Description=Good Morning Romane - kiosk browser (cage)
+After=gmr.service systemd-user-sessions.service plymouth-quit-wait.service
+Wants=gmr.service
+Conflicts=getty@tty1.service
+
+[Service]
+User=__USER__
+PAMName=login
+TTYPath=/dev/tty1
+StandardInput=tty
+StandardOutput=journal
+StandardError=journal
+Environment=XDG_RUNTIME_DIR=/run/user/__UID__
+Environment=XDG_SESSION_TYPE=wayland
+Environment=GMR_URL=http://127.0.0.1:8000
+ExecStart=/usr/bin/cage -d -s -- __HOME__/gmr/deploy/kiosk.sh --once
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target

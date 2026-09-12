@@ -1,0 +1,5 @@
+app/morning.db
+app/morning.db-journal
+app/static/fonts/
+__pycache__/
+app/settings.json

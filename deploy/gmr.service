@@ -1,0 +1,18 @@
+[Unit]
+Description=Good Morning Romane - routine tracker (HTTP :8000)
+After=network.target
+
+[Service]
+Type=simple
+User=__USER__
+WorkingDirectory=__HOME__/gmr/app
+Environment=PYTHONUNBUFFERED=1
+# Environment=GMR_GOAL=07:30
+# Environment=GMR_TASKS=wake,clothes,breakfast,teeth
+ExecStart=/usr/bin/python3 __HOME__/gmr/app/server.py
+Restart=always
+RestartSec=3
+Nice=-5
+
+[Install]
+WantedBy=multi-user.target

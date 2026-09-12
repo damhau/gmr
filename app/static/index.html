@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>En route pour l'école, Romane !</title>
+<style>
+  @font-face{font-family:"Fredoka";font-weight:400 700;font-display:swap;
+    src:url(/static/fonts/Fredoka.woff2) format("woff2")}
+  :root{--sky:#D6ECFF;--dawn:#FFE6CB;--ink:#22304F;--sun:#FFD23F;--path:#F7C88C;--path-done:#FF8A65;
+        --grass:#6ED39E;--cloud:#fff;--mist:#8FA8C6;--coral:#FF6F59;--mane:#C58BFF;--mane2:#7DD8FF;--ok:#1F9E63}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none}
+  html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none}
+  body{font-family:"Fredoka","Nunito",system-ui,sans-serif;color:var(--ink);
+       background:linear-gradient(180deg,var(--sky),var(--dawn) 65%,#FFF6EA);
+       display:flex;flex-direction:column;height:100vh;cursor:none}
+  body.mouse{cursor:auto}
+  header{text-align:center;padding:10px 12px 0;line-height:1.15}
+  h1{margin:0;font-size:1.55rem;font-weight:700}
+  header p{margin:2px 0 0;opacity:.7;font-size:.95rem}
+  .trail{flex:1;min-height:0;width:100%;display:block}
+  .station{cursor:pointer}
+  .station text{pointer-events:none}
+  .station text.lbl{font-size:24px;font-weight:600;text-anchor:middle;fill:var(--ink)}
+  .station text.tm{font-size:19px;text-anchor:middle;fill:var(--mist)}
+  .station.done text.tm{fill:var(--ok);font-weight:600}
+  .station.skip text.tm{fill:var(--mist);font-style:italic}
+  .station.late text.tm{fill:#E5793A}
+  .station .disc{fill:var(--cloud);stroke:var(--path);stroke-width:6;transition:.4s}
+  .station .hit{fill:transparent}
+  .station.done .disc{stroke:var(--path-done);fill:#FFF1EC}
+  .station.skip .disc{stroke-dasharray:8 8;opacity:.7}
+  .station .icon{font-size:38px;text-anchor:middle;filter:grayscale(1);opacity:.45;transition:.4s}
+  .station.done .icon{filter:none;opacity:1}
+  .station.pressing .disc{transform-box:fill-box;transform-origin:center;transform:scale(.92)}
+  .tick text{font-size:16px;fill:var(--ink);opacity:.55;text-anchor:middle}
+  .rider{transition:transform .9s cubic-bezier(.4,1.35,.6,1)}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .rider .body{animation:bob 1.4s ease-in-out infinite}
+  @keyframes wave{0%,100%{transform:skewY(0)}50%{transform:skewY(-8deg)}}
+  .win .flag{transform-box:fill-box;transform-origin:left center;animation:wave .8s ease-in-out infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .rays{transform-box:fill-box;transform-origin:center;opacity:0;transition:opacity .6s}
+  .win .rays{opacity:.9;animation:spin 14s linear infinite}
+  .msg{text-align:center;font-size:1.35rem;font-weight:600;margin:0 12px;min-height:1.5em;line-height:1.5}
+  .msg b{color:var(--coral)}
+  .win .msg b{color:var(--ok)}
+  .bottom{display:flex;align-items:center;gap:14px;padding:6px 14px 12px}
+  .week{flex:1;display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .day{background:rgba(255,255,255,.55);border-radius:16px;padding:6px 2px 4px;text-align:center;line-height:1.2}
+  .day .wd{font-size:.8rem;font-weight:600;opacity:.7}
+  .day .star{font-size:1.45rem;filter:grayscale(1);opacity:.3;line-height:1.25}
+  .day.full .star{filter:none;opacity:1}
+  .day.today{outline:3px solid var(--sun)}
+  .day.future{opacity:.4}
+  .day .cnt{font-size:.7rem;color:var(--mist);min-height:1em}
+  .streak{text-align:center;font-size:.85rem;line-height:1.1;min-width:96px;opacity:.85}
+  .streak b{display:block;font-size:2rem;color:var(--coral);line-height:1.1}
+  @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+  .pop{animation:pop .5s}
+  .offline{position:fixed;left:0;right:0;bottom:0;background:#22304F;color:#fff;text-align:center;
+    font-size:.85rem;padding:4px;display:none}
+  body.offline .offline{display:block}
+  /* confetti */
+  .conf{position:fixed;top:-20px;font-size:1.6rem;pointer-events:none;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+  @media (prefers-reduced-motion:reduce){.rider,.rider .body,.station *,.flag,.rays,.conf{transition:none;animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>En route pour l'école, Romane&nbsp;!</h1>
+  <p>Quatre étapes, puis le drapeau. Tu y arrives avant <span id="goalTxt">7h30</span>&nbsp;?</p>
+</header>
+
+<svg class="trail" viewBox="0 0 1000 330" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Le sentier du matin">
+  <g transform="translate(930,60)">
+    <g class="rays" fill="var(--sun)">
+      <path d="M0 -70 L8 -40 L-8 -40 Z"/><path d="M0 70 L8 40 L-8 40 Z"/><path d="M70 0 L40 8 L40 -8 Z"/><path d="M-70 0 L-40 8 L-40 -8 Z"/>
+      <path transform="rotate(45)" d="M0 -70 L8 -40 L-8 -40 Z"/><path transform="rotate(135)" d="M0 -70 L8 -40 L-8 -40 Z"/>
+      <path transform="rotate(225)" d="M0 -70 L8 -40 L-8 -40 Z"/><path transform="rotate(315)" d="M0 -70 L8 -40 L-8 -40 Z"/>
+    </g>
+    <circle r="34" fill="var(--sun)"/>
+  </g>
+  <g fill="#fff" opacity=".9">
+    <ellipse cx="150" cy="60" rx="46" ry="18"/><ellipse cx="180" cy="50" rx="30" ry="18"/>
+    <ellipse cx="560" cy="45" rx="40" ry="16"/><ellipse cx="585" cy="36" rx="26" ry="16"/>
+  </g>
+  <rect x="0" y="250" width="1000" height="80" fill="var(--grass)"/>
+  <path id="road" d="M60 230 C 200 150, 260 150, 320 220 S 480 300, 560 210 S 720 130, 800 210 S 900 260, 940 200"
+        fill="none" stroke="var(--path)" stroke-width="18" stroke-linecap="round"/>
+  <path id="prog" d="M60 230 C 200 150, 260 150, 320 220 S 480 300, 560 210 S 720 130, 800 210 S 900 260, 940 200"
+        fill="none" stroke="var(--path-done)" stroke-width="18" stroke-linecap="round" pathLength="1"
+        stroke-dasharray="0 1" style="transition:stroke-dasharray .9s"/>
+  <g transform="translate(940,200)">
+    <line x1="0" y1="0" x2="0" y2="-90" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>
+    <path class="flag" d="M0 -90 L58 -72 L0 -54 Z" fill="var(--coral)"/>
+    <text id="flagTxt" x="4" y="-100" font-size="17" fill="var(--ink)" font-weight="600">7h30</text>
+  </g>
+  <g id="stations"></g>
+  <g class="tick" id="ticks"></g>
+  <g id="rider" class="rider">
+    <g class="body" transform="translate(-40,-70)">
+      <ellipse cx="34" cy="80" rx="8" ry="5" fill="rgba(0,0,0,.12)"/>
+      <rect x="14" y="52" width="8" height="24" rx="4" fill="#fff"/><rect x="38" y="52" width="8" height="24" rx="4" fill="#fff"/>
+      <ellipse cx="30" cy="48" rx="26" ry="17" fill="#fff"/>
+      <path d="M6 44 C -10 34, -8 60, 6 56" fill="var(--mane)"/>
+      <ellipse cx="54" cy="30" rx="15" ry="13" fill="#fff"/>
+      <ellipse cx="66" cy="34" rx="8" ry="6" fill="#FFD9E8"/>
+      <circle cx="56" cy="27" r="2.6" fill="var(--ink)"/>
+      <path d="M40 22 C 38 6, 56 8, 52 20 C 60 4, 72 14, 62 24" fill="var(--mane2)"/>
+      <path d="M50 18 L54 -2 L58 18 Z" fill="var(--sun)"/>
+    </g>
+  </g>
+</svg>
+
+<p class="msg" id="msg"></p>
+
+<div class="bottom">
+  <div class="week" id="week"></div>
+  <div class="streak">jours d'affilée<b id="streak">0</b></div>
+</div>
+<div class="offline">Connexion au serveur perdue… nouvelle tentative</div>
+
+<script>
+const TASKS=[{id:"wake",name:"Réveil",icon:"☀️",at:.06},{id:"clothes",name:"Habits",icon:"👕",at:.32},
+             {id:"breakfast",name:"Déjeuner",icon:"🥣",at:.60},{id:"teeth",name:"Dents",icon:"🪥",at:.86}];
+const MSGS=["En selle, c'est parti !","Super départ !","À mi-chemin !","Presque au drapeau…","Tu as réussi ! 🎉"];
+const DAYS=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+const fr=t=>t?t.replace(/^0/,"").replace(":","h"):"";
+const road=document.getElementById("road"), L=road.getTotalLength();
+const pt=f=>road.getPointAtLength(f*L);
+const $=id=>document.getElementById(id);
+const NS="http://www.w3.org/2000/svg";
+
+// clock ticks under each stop + the flag; texts filled from settings (targets/goal)
+const tick=(id,x)=>{const t=document.createElementNS(NS,"text");t.id="tk-"+id;t.setAttribute("x",x);t.setAttribute("y",290);$("ticks").appendChild(t);};
+TASKS.forEach(t=>tick(t.id,pt(t.at).x)); tick("goal",940);
+
+// stations: tap = fait, appui long (700 ms) = annuler
+const S=$("stations"); let state={tasks:{}};
+TASKS.forEach(t=>{
+  const p=pt(t.at);
+  const g=document.createElementNS(NS,"g");
+  g.setAttribute("class","station"); g.id="st-"+t.id;
+  g.innerHTML=`<circle class="disc" cx="${p.x}" cy="${p.y}" r="34"/>
+    <text class="icon" x="${p.x}" y="${p.y+14}">${t.icon}</text>
+    <text class="lbl" x="${p.x}" y="${p.y+64}">${t.name}</text>
+    <text class="tm" x="${p.x}" y="${p.y+86}"></text>
+    <circle class="hit" cx="${p.x}" cy="${p.y+40}" r="60"/>`;
+  let timer=null, long=false;
+  const down=e=>{e.preventDefault();long=false;g.classList.add("pressing");
+    timer=setTimeout(()=>{long=true;g.classList.remove("pressing");if(state.tasks[t.id]?.state!=="todo")send(t.id,"undo");},700);};
+  const up=e=>{e.preventDefault();g.classList.remove("pressing");if(timer){clearTimeout(timer);timer=null;}
+    if(!long&&state.tasks[t.id]?.state==="todo")send(t.id,"done");};
+  const cancel=()=>{g.classList.remove("pressing");if(timer){clearTimeout(timer);timer=null;}};
+  g.addEventListener("pointerdown",down);g.addEventListener("pointerup",up);
+  g.addEventListener("pointerleave",cancel);g.addEventListener("pointercancel",cancel);
+  S.appendChild(g);
+});
+document.addEventListener("contextmenu",e=>e.preventDefault());
+document.addEventListener("mousemove",()=>document.body.classList.add("mouse"),{once:true});
+
+let wasComplete=null;
+function renderToday(t){
+  state=t;
+  const n=t.done;
+  let f=0; for(const task of TASKS) if(t.tasks[task.id].state==="done") f=task.at;
+  const p=pt(f);
+  $("rider").style.transform=`translate(${p.x}px,${p.y}px)`;
+  $("prog").style.strokeDasharray=`${f} 1`;
+  const targets=t.targets||{};
+  TASKS.forEach(task=>{
+    const s=t.tasks[task.id], g=$("st-"+task.id), target=targets[task.id]||"";
+    g.classList.toggle("done",s.state==="done"); g.classList.toggle("skip",s.state==="skip");
+    g.classList.toggle("late",s.state==="done"&&!!target&&s.time>target);
+    g.querySelector(".tm").textContent=s.state==="skip"?"passé":fr(s.time);
+    $("tk-"+task.id).textContent=fr(target);
+  });
+  $("tk-goal").textContent=fr(t.goal);
+  $("goalTxt").textContent=fr(t.goal); $("flagTxt").textContent=fr(t.goal);
+  document.body.classList.toggle("win",t.complete&&t.on_time);
+  const m=$("msg");
+  if(t.complete) m.innerHTML=t.on_time?`Arrivée à <b>${fr(t.finished_at)}</b>, avant ${fr(t.goal)} ! 🎉 Bravo Romane !`
+                                     :`Arrivée à <b>${fr(t.finished_at)}</b>. Demain avant ${fr(t.goal)} ?`;
+  else m.textContent=MSGS[Math.min(n,MSGS.length-1)];
+  if(wasComplete===false&&t.complete) confetti();
+  wasComplete=t.complete;
+}
+function renderWeek(w){
+  const box=$("week"); box.innerHTML="";
+  w.days.forEach(d=>{
+    const el=document.createElement("div");
+    el.className="day"+(d.complete?" full":"")+(d.today?" today":"")+(d.future?" future":"");
+    el.innerHTML=`<div class="wd">${DAYS[d.weekday]}</div><div class="star">${d.complete&&d.on_time?"🌟":"⭐"}</div><div class="cnt">${d.future?"":d.done+"/"+d.total}</div>`;
+    box.appendChild(el);
+  });
+  const s=$("streak");
+  if(s.textContent!=String(w.streak)){s.classList.remove("pop");void s.offsetWidth;s.classList.add("pop");}
+  s.textContent=w.streak;
+}
+function confetti(){
+  const em=["🌟","⭐","🦄","🎉","✨"];
+  for(let i=0;i<24;i++){const e=document.createElement("span");e.className="conf";e.textContent=em[i%em.length];
+    e.style.left=Math.random()*100+"vw";e.style.animationDuration=(2+Math.random()*2)+"s";e.style.animationDelay=(Math.random()*.8)+"s";
+    document.body.appendChild(e);setTimeout(()=>e.remove(),5000);}
+}
+
+let lastDay=null;
+async function refreshWeek(){
+  const w=await fetch("/api/week",{cache:"no-store"}).then(r=>r.json()); renderWeek(w);
+}
+async function applyToday(t){
+  if(t.day!==lastDay||t.complete!==wasComplete) await refreshWeek();
+  renderToday(t); lastDay=t.day;
+}
+async function load(){
+  try{
+    const t=await fetch("/api/today",{cache:"no-store"}).then(r=>r.json());
+    await applyToday(t);
+    document.body.classList.remove("offline");
+  }catch(e){document.body.classList.add("offline");}
+}
+async function send(task,action){
+  try{await fetch("/event",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({task,action})});}
+  catch(e){load();}
+}
+// live updates: the server pushes "today" on every change (button press, tap, settings)
+const es=new EventSource("/api/stream");
+es.addEventListener("today",e=>{applyToday(JSON.parse(e.data));document.body.classList.remove("offline");});
+es.onopen=()=>{document.body.classList.remove("offline");load();};   // (re)connected: resync in case something was missed
+es.onerror=()=>document.body.classList.add("offline");              // EventSource reconnects by itself
+setInterval(load,60000);                                             // safety net: day rollover, missed events
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)load();});
+load();
+</script>
+</body>
+</html>

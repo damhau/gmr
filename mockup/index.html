@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Good morning!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#CFE9FF; --dawn:#FFE3C2; --sun:#FFD23F; --sun-edge:#FFB020;
+    --ink:#1F2E4D; --cloud:#FFFFFF; --grass:#57C98F; --coral:#FF7A5C; --mist:#9DB6D3;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:"Fredoka","Nunito","Arial Rounded MT Bold",system-ui,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,var(--sky) 0%,var(--dawn) 70%,#FFF4E4 100%);
+    min-height:100%; display:flex; flex-direction:column; align-items:center;
+  }
+  /* ---- horizon: the sun rises as tasks get done ---- */
+  .horizon{position:relative;width:100%;max-width:520px;height:190px;overflow:hidden}
+  .sun{
+    position:absolute;left:50%;bottom:-70px;width:140px;height:140px;margin-left:-70px;
+    border-radius:50%;background:radial-gradient(circle at 40% 35%,#FFF3A8,var(--sun) 55%,var(--sun-edge));
+    box-shadow:0 0 0 18px rgba(255,210,63,.25),0 0 0 40px rgba(255,210,63,.12);
+    transform:translateY(calc((4 - var(--done)) * 32px));
+    transition:transform .8s cubic-bezier(.34,1.3,.64,1);
+  }
+  .hill{position:absolute;left:-10%;right:-10%;bottom:0;height:70px;
+    background:var(--grass);border-radius:50% 50% 0 0 / 100% 100% 0 0}
+  .greeting{position:absolute;top:22px;width:100%;text-align:center;font-size:1.7rem;font-weight:700;margin:0}
+  .sub{position:absolute;top:60px;width:100%;text-align:center;font-size:1rem;color:var(--ink);opacity:.75}
+
+  main{width:100%;max-width:520px;padding:0 16px 32px}
+  /* ---- today's four tasks ---- */
+  .tasks{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:-6px}
+  .task{
+    background:var(--cloud);border:0;border-radius:28px;padding:14px 6px 12px;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    font:inherit;color:inherit;cursor:pointer;
+    box-shadow:0 6px 0 rgba(31,46,77,.10);transition:transform .15s;
+  }
+  .task:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(31,46,77,.10)}
+  .task:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+  .task .icon{font-size:2.2rem;line-height:1;filter:grayscale(1);opacity:.45;transition:.3s}
+  .task.done .icon{filter:none;opacity:1;transform:scale(1.12)}
+  .task .name{font-weight:600;font-size:.95rem}
+  .task .time{font-size:.8rem;color:var(--mist);min-height:1em}
+  .task.done .time{color:var(--grass);font-weight:600}
+  .task.skip .icon{opacity:.25}
+
+  .goal{text-align:center;margin:18px 0 6px;font-size:1.05rem}
+  .goal strong{color:var(--coral)}
+  .goal.win strong{color:var(--grass)}
+
+  /* ---- the week ---- */
+  h2{font-size:1.15rem;font-weight:600;margin:28px 0 10px;text-align:center}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .day{background:rgba(255,255,255,.55);border-radius:18px;padding:10px 4px;text-align:center}
+  .day .wd{font-size:.8rem;font-weight:600;opacity:.7}
+  .day .star{font-size:1.6rem;line-height:1.3;filter:grayscale(1);opacity:.3}
+  .day.full .star{filter:none;opacity:1}
+  .day.today{outline:3px solid var(--sun);}
+  .day.future{opacity:.45}
+  .day .cnt{font-size:.75rem;color:var(--mist)}
+
+  .streak{text-align:center;margin-top:22px;font-size:1.1rem}
+  .streak b{font-size:2rem;display:block;color:var(--coral)}
+  .hint{text-align:center;font-size:.8rem;opacity:.55;margin-top:20px}
+
+  @media (prefers-reduced-motion:reduce){.sun,.task,.task .icon{transition:none}}
+  @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.25)}100%{transform:scale(1)}}
+  .pop{animation:pop .5s}
+</style>
+</head>
+<body>
+  <div class="horizon" id="horizon" style="--done:0">
+    <h1 class="greeting" id="greeting">Good morning!</h1>
+    <p class="sub" id="sub">Let's get the sun up.</p>
+    <div class="sun" id="sun"></div>
+    <div class="hill"></div>
+  </div>
+
+  <main>
+    <div class="tasks" id="tasks"></div>
+    <p class="goal" id="goal"></p>
+
+    <h2>This week</h2>
+    <div class="week" id="week"></div>
+
+    <div class="streak">Days in a row<b id="streak">0</b></div>
+    <p class="hint">Tap a task here if you forgot to press its button.</p>
+  </main>
+
+<script>
+const TASKS = [
+  {id:"wake",      name:"Wake up",   icon:"☀️"},
+  {id:"clothes",   name:"Clothes",   icon:"👕"},
+  {id:"breakfast", name:"Breakfast", icon:"🥣"},
+  {id:"teeth",     name:"Teeth",     icon:"🪥"},
+];
+const SUBS = ["Let's get the sun up.","Nice start!","Halfway there!","One more to go…","The sun is up! ☀️"];
+
+async function load(){
+  const [t, w] = await Promise.all([fetch("/api/today").then(r=>r.json()),
+                                    fetch("/api/week").then(r=>r.json())]);
+  renderToday(t); renderWeek(w);
+}
+
+function renderToday(t){
+  document.getElementById("horizon").style.setProperty("--done", t.done);
+  document.getElementById("sub").textContent = SUBS[t.done];
+  const box = document.getElementById("tasks"); box.innerHTML = "";
+  TASKS.forEach(task=>{
+    const s = t.tasks[task.id];
+    const b = document.createElement("button");
+    b.className = "task " + s.state;
+    b.innerHTML = `<span class="icon">${task.icon}</span><span class="name">${task.name}</span><span class="time">${s.time||""}</span>`;
+    b.onclick = () => toggle(task.id, s.state);
+    box.appendChild(b);
+  });
+  const g = document.getElementById("goal");
+  if (t.complete){
+    g.className = "goal " + (t.on_time ? "win":"");
+    g.innerHTML = t.on_time ? `All done at <strong>${t.finished_at}</strong> — before ${t.goal}! 🎉`
+                            : `All done at <strong>${t.finished_at}</strong>. Tomorrow before ${t.goal}?`;
+  } else {
+    g.className = "goal";
+    g.innerHTML = `Goal: everything done before <strong>${t.goal}</strong>`;
+  }
+}
+
+function renderWeek(w){
+  const box = document.getElementById("week"); box.innerHTML = "";
+  const today = new Date().toISOString().slice(0,10);
+  w.days.forEach(d=>{
+    const el = document.createElement("div");
+    el.className = "day" + (d.complete?" full":"") + (d.day===today?" today":"") + (d.future?" future":"");
+    el.innerHTML = `<div class="wd">${d.weekday}</div><div class="star">${d.complete&&d.on_time?"🌟":"⭐"}</div><div class="cnt">${d.future?"":d.done+"/"+d.total}</div>`;
+    box.appendChild(el);
+  });
+  const s = document.getElementById("streak");
+  if (s.textContent != w.streak) s.classList.add("pop");
+  s.textContent = w.streak;
+}
+
+async function toggle(task, state){
+  await fetch("/event",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({task, action: state==="done" ? "undo":"done"})});
+  load();
+}
+
+load();
+setInterval(load, 10000); // buttons pressed elsewhere show up within 10s
+</script>
+</body>
+</html>

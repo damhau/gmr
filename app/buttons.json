@@ -1,0 +1,7 @@
+{
+  "_comment": "Flic button -> task. Keys: button serial (see server log or GET /api/buttons). Values: wake | clothes | breakfast | teeth. Re-read on every press, no restart needed.",
+  "BD03-C26071": "wake",
+  "BD03-C29207": "clothes",
+  "BD03-C28779": "breakfast",
+  "BD03-C28826": "teeth"
+}
