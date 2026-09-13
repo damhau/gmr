@@ -102,7 +102,7 @@
     </section>
     <section class="card" id="c-cal">
       <h2>Calendrier</h2>
-      <p class="sub">Un carré par jour.</p>
+      <p class="sub">Un carré par jour d'école (lundi à vendredi).</p>
       <div class="legend"><span><i class="k" style="background:var(--good)"></i>✓ à l'heure</span><span><i class="k" style="background:var(--serious)"></i>⚠ en retard</span><span><i class="k" style="background:var(--critical)"></i>✗ incomplet</span><span><i class="k" style="background:var(--seq-none)"></i>pas de routine</span></div>
       <div id="cal" style="overflow-x:auto"></div>
     </section>
@@ -195,7 +195,7 @@ function renderKpis(){
   box.appendChild(tile("Jours d'affilée",String(k.current_streak),`record : ${k.best_streak}`));
   x=(k.avg_duration_min==null||p.avg_duration_min==null)?["",""]:(()=>{const d=k.avg_duration_min-p.avg_duration_min;return[`${d>0?"+":""}${d} min vs période précédente`,d===0?"":d<0?"up":"down"];})();
   box.appendChild(tile("Durée réveil → dents",dur(k.avg_duration_min),x[0],x[1]));
-  box.appendChild(tile("Matins avec routine",`${k.active_days}`,`sur ${k.days_total} jours · ${k.missed_weekdays} jour${k.missed_weekdays>1?"s":""} de semaine sans`));
+  box.appendChild(tile("Matins avec routine",`${k.active_days}`,`sur ${k.days_total} jours d'école · ${k.missed_weekdays} sans routine`));
 }
 
 /* ---------- chart 1: finish time per day (dots + goal) ---------- */
@@ -205,7 +205,7 @@ function renderFinish(){
   if(!data.length){box.innerHTML=`<div class="empty">Pas encore de matin enregistré sur cette période.</div>`;return;}
   const W=box.clientWidth||800,H=240,m={t:12,r:16,b:28,l:44},goal=mins(R.goal);
   const ts=data.map(d=>d.t).concat(goal);let lo=Math.floor((Math.min(...ts)-10)/15)*15,hi=Math.ceil((Math.max(...ts)+10)/15)*15;
-  const x0=new Date(R.from+"T12:00:00"),x1=new Date(R.to+"T12:00:00"),span=(x1-x0)||1;
+  const x0=new Date(R.days[0].day+"T12:00:00"),x1=new Date(R.days[R.days.length-1].day+"T12:00:00"),span=(x1-x0)||1;
   const X=iso=>m.l+((new Date(iso+"T12:00:00")-x0)/span)*(W-m.l-m.r), Y=t=>m.t+((t-lo)/(hi-lo))*(H-m.t-m.b);
   const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,height:H},box);
   // good zone wash (before goal)
@@ -234,11 +234,11 @@ function renderWeeks(){
   const box=$("weeks");box.replaceChildren();
   const weeks=R.weeks.filter(w=>w.days>0);
   if(!weeks.length)return;
-  const W=box.clientWidth||400,H=200,m={t:10,r:8,b:26,l:26},maxV=7;
+  const W=box.clientWidth||400,H=200,m={t:10,r:8,b:26,l:26},maxV=5;
   const bw=Math.min(24,(W-m.l-m.r)/weeks.length*0.6),step=(W-m.l-m.r)/weeks.length;
   const Y=v=>H-m.b-(v/maxV)*(H-m.t-m.b);
   const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,height:H},box);
-  [0,2,4,6].forEach(v=>{el("line",{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v),stroke:"var(--grid)"},svg);txt(svg,m.l-6,Y(v)+4,v,{"text-anchor":"end",class:"tab"});});
+  [0,1,2,3,4,5].forEach(v=>{el("line",{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v),stroke:"var(--grid)"},svg);txt(svg,m.l-6,Y(v)+4,v,{"text-anchor":"end",class:"tab"});});
   el("line",{x1:m.l,x2:W-m.r,y1:Y(0),y2:Y(0),stroke:"var(--axis)"},svg);
   weeks.forEach((w,i)=>{
     const x=m.l+step*i+(step-bw)/2,inc=w.active-w.complete,late=w.complete-w.on_time,segs=[[w.on_time,"var(--seq-hi)"],[late,"var(--seq-lo)"],[inc,"var(--seq-none)"]];
@@ -258,13 +258,16 @@ function renderWeeks(){
 /* ---------- chart 3: calendar heatmap ---------- */
 function renderCal(){
   const box=$("cal");box.replaceChildren();
-  const first=new Date(R.from+"T12:00:00"),offset=(first.getDay()+6)%7;
-  const cols=Math.ceil((R.days.length+offset)/7);
-  const avail=box.clientWidth||400,cell=Math.max(11,Math.min(18,Math.floor((avail-24)/cols)-3)),gap=3,H=7*(cell+gap)+18,W=Math.max(avail,24+cols*(cell+gap));
+  if(!R.days.length)return;
+  // 5 rows (Mon-Fri), one column per week; school days are not contiguous, so place each by its date
+  const monday0=new Date(R.days[0].day+"T12:00:00");monday0.setDate(monday0.getDate()-R.days[0].weekday);
+  const col=d=>Math.floor(Math.round((new Date(d.day+"T12:00:00")-monday0)/864e5)/7);
+  const cols=col(R.days[R.days.length-1])+1;
+  const avail=box.clientWidth||400,cell=Math.max(11,Math.min(18,Math.floor((avail-24)/cols)-3)),gap=3,H=5*(cell+gap)+18,W=Math.max(avail,24+cols*(cell+gap));
   const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,height:H},box);svg.style.width=W+"px";
-  DAYS.forEach((d,i)=>{if(i%2===0)txt(svg,0,16+i*(cell+gap)+cell*0.75,d,{});});
-  R.days.forEach((d,i)=>{
-    const idx=i+offset,c=Math.floor(idx/7),r=idx%7,x=24+c*(cell+gap),y=16+r*(cell+gap),s=status(d);
+  DAYS.slice(0,5).forEach((d,i)=>{if(i%2===0)txt(svg,0,16+i*(cell+gap)+cell*0.75,d,{});});
+  R.days.forEach(d=>{
+    const c=col(d),r=d.weekday,x=24+c*(cell+gap),y=16+r*(cell+gap),s=status(d);
     if(r===0&&new Date(d.day+"T12:00:00").getDate()<=7)txt(svg,x,10,MONTHS[new Date(d.day+"T12:00:00").getMonth()],{});
     const rect=el("rect",{x,y,width:cell,height:cell,rx:3,fill:STATUS_COLOR[s],opacity:s==="none"?0.7:1},svg);
     if(d.day===R.to)el("rect",{x:x-1.5,y:y-1.5,width:cell+3,height:cell+3,rx:4,fill:"none",stroke:"var(--ink)","stroke-width":1.5},svg);
@@ -316,7 +319,7 @@ function renderSteps(){
       {t:s.avg_delay_when_late==null?"–":`${s.avg_delay_when_late} min (${s.late}×)`,c:"n"},{t:s.avg_gap_min==null?"–":dur(s.avg_gap_min),c:"n"},{t:`${s.skipped} / ${s.missed}`,c:"n"}];}));
 }
 function renderWeekdays(){
-  const rows=R.kpis.weekdays.filter(w=>w.active||w.weekday<5);
+  const rows=R.kpis.weekdays;
   table("wd",["Jour",{t:"Matins",c:"n"},{t:"Terminée",c:"n"},{t:"À l'heure",c:"n"},"Arrivée moy."],
     rows.map(w=>[DAYSL[w.weekday],{t:w.active,c:"n"},meter(w.completion_rate),meter(w.on_time_rate),fr(w.avg_finish)]));
 }
@@ -351,7 +354,7 @@ async function load(){
     if(R.tracking_since){const n=Math.ceil((new Date(R.to)-new Date(R.tracking_since))/864e5)+1;if(n<R.days_back)R=await get(Math.max(7,n));}
   }else R=await get(days);
   $("csv").href=`/api/report.csv?days=${R.days_back}`;
-  $("range").textContent=`Du ${fdate(R.from)} au ${fdate(R.to)} · ${R.days_back} jours · objectif ${fr(R.goal)}`;
+  $("range").textContent=`Du ${fdate(R.days[0].day)} au ${fdate(R.days[R.days.length-1].day)} · ${R.days.length} jours d'école · objectif ${fr(R.goal)}`;
   renderKpis();renderCharts();renderSteps();renderWeekdays();renderRecords();renderJournal(false);
   document.querySelectorAll(".card").forEach(c=>c.classList.remove("loading"));
 }

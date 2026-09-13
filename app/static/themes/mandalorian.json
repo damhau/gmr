@@ -1,0 +1,119 @@
+{
+ "name": "Star Wars – Mandalorian",
+ "emoji": "🛸",
+ "colors": {
+  "sky": "#1B1F3F",
+  "dawn": "#6E3F6A",
+  "horizon": "#E8955A",
+  "ground": "#C9A06B",
+  "path": "#EAD6AE",
+  "pathDone": "#8FE39A",
+  "ink": "#F5EFE3",
+  "cloud": "#3B3F66",
+  "mist": "#BDB6D4",
+  "accent": "#FF9B3D",
+  "ok": "#8FE39A",
+  "sun": "#FFD9A0",
+  "discDone": "#3E3455"
+ },
+ "texts": {
+  "title": "Telle est la voie, Romane !",
+  "subtitle": "Quatre missions avant {goal}. Grogu compte sur toi !",
+  "msgs": [
+   "Debout, Mando !",
+   "Première mission accomplie !",
+   "À mi-chemin de la galaxie !",
+   "Le Razor Crest est en vue…",
+   "Telle est la voie ! 🎉"
+  ],
+  "win": "Arrivée à {time}, avant {goal} ! 🛸 Grogu applaudit avec ses grandes oreilles !",
+  "late": "Arrivée à {time}. Demain, hyperespace avant {goal} ?"
+ },
+ "icons": {
+  "wake": "🌌",
+  "clothes": "🪖",
+  "breakfast": "🍲",
+  "teeth": "🪥"
+ },
+ "sky": {
+  "type": "sun"
+ },
+ "clouds": false,
+ "confetti": [
+  "🛸",
+  "⭐",
+  "💚",
+  "🌌",
+  "✨"
+ ],
+ "decor": [
+  {
+   "circle": 1,
+   "x": 880,
+   "y": 70,
+   "r": 16,
+   "fill": "#FFB870"
+  },
+  {
+   "circle": 1,
+   "x": 90,
+   "y": 40,
+   "r": 2,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 230,
+   "y": 90,
+   "r": 1.5,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 340,
+   "y": 30,
+   "r": 2.2,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 470,
+   "y": 60,
+   "r": 1.6,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 620,
+   "y": 25,
+   "r": 2,
+   "fill": "#fff"
+  },
+  {
+   "circle": 1,
+   "x": 760,
+   "y": 100,
+   "r": 1.4,
+   "fill": "#fff"
+  },
+  {
+   "emoji": "🛸",
+   "x": 560,
+   "y": 90,
+   "size": 34
+  },
+  {
+   "emoji": "🌵",
+   "x": 220,
+   "y": 246,
+   "size": 40
+  },
+  {
+   "emoji": "🪨",
+   "x": 700,
+   "y": 246,
+   "size": 34
+  }
+ ],
+ "rider": "<ellipse cx=\"38\" cy=\"79\" rx=\"16\" ry=\"4\" fill=\"rgba(0,0,0,.14)\"/><ellipse cx=\"40\" cy=\"74\" rx=\"18\" ry=\"3.5\" fill=\"#8FE39A\" opacity=\".5\"/>\n<ellipse cx=\"40\" cy=\"58\" rx=\"28\" ry=\"17\" fill=\"#8A9199\"/>\n<path d=\"M22 60 q18 -14 36 0 v6 h-36z\" fill=\"#8B6A4A\"/>\n<path d=\"M28 34 l-23 -7 q-2 7 4 9 l19 2z\" fill=\"#8DBF7A\"/><path d=\"M52 34 l23 -7 q2 7 -4 9 l-19 2z\" fill=\"#8DBF7A\"/>\n<ellipse cx=\"40\" cy=\"40\" rx=\"14\" ry=\"12\" fill=\"#8DBF7A\"/>\n<circle cx=\"34\" cy=\"41\" r=\"4.5\" fill=\"#111\"/><circle cx=\"47\" cy=\"41\" r=\"4.5\" fill=\"#111\"/><circle cx=\"35.5\" cy=\"39.5\" r=\"1.4\" fill=\"#fff\"/><circle cx=\"48.5\" cy=\"39.5\" r=\"1.4\" fill=\"#fff\"/>\n<path d=\"M37 49 q3 2 6 0\" stroke=\"#3E5E2E\" stroke-width=\"1.4\" fill=\"none\" stroke-linecap=\"round\"/>\n<path d=\"M36 29 q1 -5 3 -3 M41 28 q1 -4 3 -2\" stroke=\"#E3EBD0\" stroke-width=\"1.2\" fill=\"none\" stroke-linecap=\"round\"/>\n<path d=\"M12 58 a28 17 0 0 0 56 0z\" fill=\"#C4CAD2\"/><path d=\"M15 63 q25 8 50 0\" stroke=\"#9AA1AB\" stroke-width=\"2\" fill=\"none\"/>"
+}

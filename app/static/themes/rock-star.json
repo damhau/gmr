@@ -1,0 +1,96 @@
+{
+ "name": "Rock star",
+ "emoji": "🎸",
+ "colors": {
+  "sky": "#1A0F2E",
+  "dawn": "#5B1E5E",
+  "horizon": "#E63E7B",
+  "ground": "#2B2140",
+  "path": "#FFB84C",
+  "pathDone": "#FF3D7F",
+  "ink": "#FFF4F8",
+  "cloud": "#4A2F6E",
+  "mist": "#C9B3E0",
+  "accent": "#FFB84C",
+  "ok": "#7CFFB2",
+  "sun": "#FFD23F",
+  "discDone": "#3E2A5E"
+ },
+ "texts": {
+  "title": "En scène, Romane !",
+  "subtitle": "Quatre morceaux avant le grand concert de {goal} !",
+  "msgs": [
+   "Le public t'attend !",
+   "Premier riff réussi !",
+   "À mi-chemin du concert !",
+   "Le solo final approche…",
+   "Standing ovation ! 🎉"
+  ],
+  "win": "Arrivée à {time}, avant {goal} ! 🎸 Rock star !",
+  "late": "Arrivée à {time}. Demain, le concert commence avant {goal} ?"
+ },
+ "icons": {
+  "wake": "🎵",
+  "clothes": "🕶️",
+  "breakfast": "🥣",
+  "teeth": "🎤"
+ },
+ "sky": {
+  "type": "emoji",
+  "emoji": "⚡",
+  "size": 56
+ },
+ "clouds": false,
+ "confetti": [
+  "🎸",
+  "⭐",
+  "🎶",
+  "🔥",
+  "🤘"
+ ],
+ "decor": [
+  {
+   "emoji": "🎤",
+   "x": 130,
+   "y": 60,
+   "size": 24
+  },
+  {
+   "emoji": "🎶",
+   "x": 300,
+   "y": 40,
+   "size": 26
+  },
+  {
+   "emoji": "⭐",
+   "x": 560,
+   "y": 70,
+   "size": 22
+  },
+  {
+   "emoji": "🎵",
+   "x": 660,
+   "y": 30,
+   "size": 22
+  },
+  {
+   "emoji": "✨",
+   "x": 800,
+   "y": 100,
+   "size": 20
+  },
+  {
+   "emoji": "🔊",
+   "x": 220,
+   "y": 246,
+   "size": 36
+  },
+  {
+   "emoji": "🥁",
+   "x": 700,
+   "y": 246,
+   "size": 40
+  }
+ ],
+ "rider": "<ellipse cx=\"38\" cy=\"79\" rx=\"16\" ry=\"4\" fill=\"rgba(0,0,0,.14)\"/><rect x=\"26\" y=\"52\" width=\"9\" height=\"24\" rx=\"3\" fill=\"#222\"/><rect x=\"41\" y=\"52\" width=\"9\" height=\"24\" rx=\"3\" fill=\"#222\"/>\n<rect x=\"24\" y=\"72\" width=\"12\" height=\"6\" rx=\"2\" fill=\"#5D4037\"/><rect x=\"40\" y=\"72\" width=\"12\" height=\"6\" rx=\"2\" fill=\"#5D4037\"/>\n<path d=\"M27 30 h22 l3 24 h-28z\" fill=\"#1C1C24\"/><path d=\"M35 30 h6 v22 h-6z\" fill=\"#E53935\"/>\n<line x1=\"46\" y1=\"50\" x2=\"74\" y2=\"30\" stroke=\"#8B5A2B\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n<line x1=\"47\" y1=\"49\" x2=\"73\" y2=\"30\" stroke=\"#E8DCC0\" stroke-width=\"1\"/>\n<rect x=\"69\" y=\"24\" width=\"9\" height=\"9\" rx=\"2\" fill=\"#222\" transform=\"rotate(-35 73.5 28.5)\"/>\n<ellipse cx=\"44\" cy=\"54\" rx=\"13\" ry=\"9\" fill=\"#E53935\" transform=\"rotate(-20 44 54)\"/><circle cx=\"46\" cy=\"53\" r=\"3\" fill=\"#fff\"/><circle cx=\"41\" cy=\"56\" r=\"1.5\" fill=\"#222\"/>\n<path d=\"M30 36 l26 -6\" stroke=\"#1C1C24\" stroke-width=\"6\" stroke-linecap=\"round\"/><circle cx=\"57\" cy=\"29\" r=\"3.5\" fill=\"#F5D0B0\"/>\n<path d=\"M48 36 l-2 14\" stroke=\"#1C1C24\" stroke-width=\"6\" stroke-linecap=\"round\"/><circle cx=\"46\" cy=\"51\" r=\"3.5\" fill=\"#F5D0B0\"/>\n<circle cx=\"38\" cy=\"20\" r=\"11\" fill=\"#F5D0B0\"/>\n<path d=\"M27 18 l-4 -12 l7 6 l2 -10 l5 7 l4 -9 l3 9 l6 -7 l-1 10 l6 -4 l-4 10z\" fill=\"#2B1B12\"/>\n<rect x=\"29\" y=\"17\" width=\"8\" height=\"5\" rx=\"2\" fill=\"#111\"/><rect x=\"39\" y=\"17\" width=\"8\" height=\"5\" rx=\"2\" fill=\"#111\"/><line x1=\"37\" y1=\"19\" x2=\"39\" y2=\"19\" stroke=\"#111\" stroke-width=\"1.5\"/>\n<ellipse cx=\"39\" cy=\"27\" rx=\"2.5\" ry=\"2\" fill=\"#B3405A\"/>"
+}

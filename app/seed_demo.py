@@ -37,10 +37,9 @@ d = start
 skill = 0.0  # slowly improves over time
 while d <= today:
     skill = min(1.0, (d - start).days / max(1, (today - start).days))
-    weekend = d.weekday() >= 5
-    if weekend and random.random() < 0.7:            # most weekends: no routine
+    if d.weekday() >= 5:                             # weekends are not part of the game
         d += timedelta(days=1); continue
-    if not weekend and random.random() < 0.06:       # sick day / holiday
+    if random.random() < 0.06:                       # sick day / holiday
         d += timedelta(days=1); continue
     # wake between 6:35 and 7:05, earlier as skill grows
     t = 6 * 60 + 35 + random.gauss(14 - 8 * skill, 8)

@@ -223,6 +223,98 @@ THEMES = {
 <rect x="26" y="8" width="26" height="26" fill="#5CB85C"/><rect x="26" y="8" width="6" height="6" fill="#7BD37B"/><rect x="44" y="26" width="6" height="6" fill="#4A9A4A"/>
 <rect x="30" y="14" width="6" height="6" fill="#111"/><rect x="42" y="14" width="6" height="6" fill="#111"/>
 <rect x="36" y="20" width="6" height="8" fill="#111"/><rect x="33" y="24" width="3" height="8" fill="#111"/><rect x="42" y="24" width="3" height="8" fill="#111"/>'''},
+
+"mandalorian": {
+  "name": "Star Wars – Mandalorian", "emoji": "🛸",
+  "colors": {"sky": "#1B1F3F", "dawn": "#6E3F6A", "horizon": "#E8955A", "ground": "#C9A06B", "path": "#EAD6AE", "pathDone": "#8FE39A",
+             "ink": "#F5EFE3", "cloud": "#3B3F66", "mist": "#BDB6D4", "accent": "#FF9B3D", "ok": "#8FE39A", "sun": "#FFD9A0", "discDone": "#3E3455"},
+  "texts": {"title": "Telle est la voie, Romane !", "subtitle": "Quatre missions avant {goal}. Grogu compte sur toi !",
+            "msgs": ["Debout, Mando !", "Première mission accomplie !", "À mi-chemin de la galaxie !", "Le Razor Crest est en vue…", "Telle est la voie ! 🎉"],
+            "win": "Arrivée à {time}, avant {goal} ! 🛸 Grogu applaudit avec ses grandes oreilles !", "late": "Arrivée à {time}. Demain, hyperespace avant {goal} ?"},
+  "icons": {"wake": "🌌", "clothes": "🪖", "breakfast": "🍲", "teeth": "🪥"},
+  "sky": {"type": "sun"}, "clouds": False, "confetti": ["🛸", "⭐", "💚", "🌌", "✨"],
+  "decor": [{"circle": 1, "x": 880, "y": 70, "r": 16, "fill": "#FFB870"},
+            {"circle": 1, "x": 90, "y": 40, "r": 2, "fill": "#fff"}, {"circle": 1, "x": 230, "y": 90, "r": 1.5, "fill": "#fff"}, {"circle": 1, "x": 340, "y": 30, "r": 2.2, "fill": "#fff"},
+            {"circle": 1, "x": 470, "y": 60, "r": 1.6, "fill": "#fff"}, {"circle": 1, "x": 620, "y": 25, "r": 2, "fill": "#fff"}, {"circle": 1, "x": 760, "y": 100, "r": 1.4, "fill": "#fff"},
+            {"emoji": "🛸", "x": 560, "y": 90, "size": 34}, {"emoji": "🌵", "x": 220, "y": 246, "size": 40}, {"emoji": "🪨", "x": 700, "y": 246, "size": 34}],
+  "rider": SHADOW + '''<ellipse cx="40" cy="74" rx="18" ry="3.5" fill="#8FE39A" opacity=".5"/>
+<ellipse cx="40" cy="58" rx="28" ry="17" fill="#8A9199"/>
+<path d="M22 60 q18 -14 36 0 v6 h-36z" fill="#8B6A4A"/>
+<path d="M28 34 l-23 -7 q-2 7 4 9 l19 2z" fill="#8DBF7A"/><path d="M52 34 l23 -7 q2 7 -4 9 l-19 2z" fill="#8DBF7A"/>
+<ellipse cx="40" cy="40" rx="14" ry="12" fill="#8DBF7A"/>
+<circle cx="34" cy="41" r="4.5" fill="#111"/><circle cx="47" cy="41" r="4.5" fill="#111"/><circle cx="35.5" cy="39.5" r="1.4" fill="#fff"/><circle cx="48.5" cy="39.5" r="1.4" fill="#fff"/>
+<path d="M37 49 q3 2 6 0" stroke="#3E5E2E" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<path d="M36 29 q1 -5 3 -3 M41 28 q1 -4 3 -2" stroke="#E3EBD0" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+<path d="M12 58 a28 17 0 0 0 56 0z" fill="#C4CAD2"/><path d="M15 63 q25 8 50 0" stroke="#9AA1AB" stroke-width="2" fill="none"/>'''},
+
+"vice-versa": {
+  "name": "Vice-Versa (Joie)", "emoji": "😄",
+  "colors": {"sky": "#FFF3B0", "dawn": "#FFD6E8", "horizon": "#FFFBEA", "ground": "#7FD8A8", "path": "#FFC3E1", "pathDone": "#FFD23F",
+             "ink": "#3A2E5C", "cloud": "#ffffff", "mist": "#8E7BB0", "accent": "#FF5FA2", "ok": "#1F9E63", "sun": "#FFD23F", "discDone": "#FFF6E0"},
+  "texts": {"title": "Joie t'accompagne à l'école, Romane !", "subtitle": "Quatre souvenirs à créer avant {goal}. Tout en jaune !",
+            "msgs": ["Le Quartier Général se réveille !", "Un souvenir tout doré !", "À mi-chemin, Joie saute partout !", "Le train de la pensée arrive…", "Souvenir essentiel créé ! 🎉"],
+            "win": "Arrivée à {time}, avant {goal} ! 😄 Une journée en or !", "late": "Arrivée à {time}. Demain, Joie gagne avant {goal} ?"},
+  "icons": {"wake": "🌞", "clothes": "👗", "breakfast": "🥞", "teeth": "🪥"},
+  "sky": {"type": "sun"}, "clouds": True, "confetti": ["💛", "💙", "💚", "❤️", "💜"],
+  "decor": [{"circle": 1, "x": 150, "y": 60, "r": 10, "fill": "#FFD23F"}, {"circle": 1, "x": 300, "y": 40, "r": 8, "fill": "#5AA9FF"}, {"circle": 1, "x": 450, "y": 80, "r": 9, "fill": "#FF5A5A"},
+            {"circle": 1, "x": 600, "y": 35, "r": 8, "fill": "#7ED957"}, {"circle": 1, "x": 760, "y": 75, "r": 9, "fill": "#B57BFF"},
+            {"emoji": "🌈", "x": 700, "y": 246, "size": 50}, {"emoji": "🎈", "x": 220, "y": 246, "size": 30}],
+  "rider": SHADOW + '''<circle cx="40" cy="42" r="34" fill="#FFF176" opacity=".35"/>
+<rect x="30" y="60" width="7" height="17" rx="3" fill="#FFE082"/><rect x="43" y="60" width="7" height="17" rx="3" fill="#FFE082"/>
+<path d="M30 36 h20 l8 28 h-36z" fill="#7ED957"/><circle cx="38" cy="50" r="1.8" fill="#C8F79A"/><circle cx="47" cy="57" r="1.8" fill="#C8F79A"/><circle cx="33" cy="59" r="1.4" fill="#C8F79A"/>
+<path d="M30 40 l-12 -14" stroke="#FFE082" stroke-width="5" stroke-linecap="round"/><path d="M50 40 l12 -14" stroke="#FFE082" stroke-width="5" stroke-linecap="round"/>
+<circle cx="40" cy="24" r="13" fill="#FFE082"/>
+<path d="M27 21 q2 -15 14 -15 q12 0 13 12 q-3 -5 -8 -6 q-2 6 -8 3 q-4 5 -11 6z" fill="#3FA9F5"/>
+<circle cx="35" cy="25" r="2.8" fill="#1E5AA8"/><circle cx="45" cy="25" r="2.8" fill="#1E5AA8"/><circle cx="36" cy="24" r="1" fill="#fff"/><circle cx="46" cy="24" r="1" fill="#fff"/>
+<path d="M34 30 q6 6 12 0" stroke="#C76A2E" stroke-width="1.6" fill="none" stroke-linecap="round"/>'''},
+
+"lego": {
+  "name": "Lego", "emoji": "🧱",
+  "colors": {"sky": "#BFE3FF", "dawn": "#E3F2FF", "horizon": "#FFFFFF", "ground": "#4CAF50", "path": "#FFD500", "pathDone": "#E3000B",
+             "ink": "#1E2A44", "cloud": "#ffffff", "mist": "#7F8FA8", "accent": "#E3000B", "ok": "#2E7D32", "sun": "#FFD500", "discDone": "#FFF7CC"},
+  "texts": {"title": "Construis ta journée, Romane !", "subtitle": "Quatre briques à assembler avant {goal}. Tout est super génial !",
+            "msgs": ["Première brique : debout !", "Une brique posée !", "À mi-chemin de la tour !", "Dernière brique en vue…", "Tout est super génial ! 🎉"],
+            "win": "Arrivée à {time}, avant {goal} ! 🧱 Maître constructrice !", "late": "Arrivée à {time}. Demain, on construit avant {goal} ?"},
+  "icons": {"wake": "🌅", "clothes": "👕", "breakfast": "🧇", "teeth": "🪥"},
+  "sky": {"type": "sun"}, "clouds": True, "confetti": ["🧱", "🟥", "🟨", "🟦", "🟩"],
+  "decor": [{"rect": 1, "x": 196, "y": 232, "w": 48, "h": 18, "fill": "#E3000B"}, {"rect": 1, "x": 204, "y": 214, "w": 32, "h": 18, "fill": "#1E64C8"},
+            {"rect": 1, "x": 208, "y": 208, "w": 8, "h": 6, "fill": "#1E64C8"}, {"rect": 1, "x": 224, "y": 208, "w": 8, "h": 6, "fill": "#1E64C8"},
+            {"rect": 1, "x": 676, "y": 232, "w": 48, "h": 18, "fill": "#FFD500"}, {"rect": 1, "x": 684, "y": 214, "w": 32, "h": 18, "fill": "#2E7D32"},
+            {"rect": 1, "x": 688, "y": 208, "w": 8, "h": 6, "fill": "#2E7D32"}, {"rect": 1, "x": 704, "y": 208, "w": 8, "h": 6, "fill": "#2E7D32"}],
+  "rider": SHADOW + '''<rect x="24" y="50" width="32" height="6" fill="#1E64C8"/><rect x="24" y="54" width="14" height="22" fill="#1E64C8"/><rect x="42" y="54" width="14" height="22" fill="#1E64C8"/>
+<rect x="22" y="72" width="16" height="5" fill="#174E9C"/><rect x="42" y="72" width="16" height="5" fill="#174E9C"/>
+<path d="M26 28 h28 l4 24 h-36z" fill="#E3000B"/><rect x="34" y="34" width="12" height="12" fill="#FFD500"/><rect x="37" y="37" width="6" height="6" fill="#E3000B"/>
+<path d="M26 31 l-8 17" stroke="#E3000B" stroke-width="8" stroke-linecap="round"/><path d="M54 31 l8 17" stroke="#E3000B" stroke-width="8" stroke-linecap="round"/>
+<circle cx="17" cy="50" r="4.5" fill="#FFD500"/><circle cx="63" cy="50" r="4.5" fill="#FFD500"/>
+<rect x="36" y="24" width="8" height="5" fill="#FFD500"/>
+<rect x="29" y="6" width="22" height="20" rx="5" fill="#FFD500"/><rect x="35" y="1" width="10" height="6" rx="1" fill="#FFD500"/>
+<circle cx="37" cy="14" r="1.8" fill="#111"/><circle cx="45" cy="14" r="1.8" fill="#111"/><path d="M35 19 q6 4 12 0" stroke="#111" stroke-width="1.5" fill="none" stroke-linecap="round"/>'''},
+
+"rock-star": {
+  "name": "Rock star", "emoji": "🎸",
+  "colors": {"sky": "#1A0F2E", "dawn": "#5B1E5E", "horizon": "#E63E7B", "ground": "#2B2140", "path": "#FFB84C", "pathDone": "#FF3D7F",
+             "ink": "#FFF4F8", "cloud": "#4A2F6E", "mist": "#C9B3E0", "accent": "#FFB84C", "ok": "#7CFFB2", "sun": "#FFD23F", "discDone": "#3E2A5E"},
+  "texts": {"title": "En scène, Romane !", "subtitle": "Quatre morceaux avant le grand concert de {goal} !",
+            "msgs": ["Le public t'attend !", "Premier riff réussi !", "À mi-chemin du concert !", "Le solo final approche…", "Standing ovation ! 🎉"],
+            "win": "Arrivée à {time}, avant {goal} ! 🎸 Rock star !", "late": "Arrivée à {time}. Demain, le concert commence avant {goal} ?"},
+  "icons": {"wake": "🎵", "clothes": "🕶️", "breakfast": "🥣", "teeth": "🎤"},
+  "sky": {"type": "emoji", "emoji": "⚡", "size": 56}, "clouds": False, "confetti": ["🎸", "⭐", "🎶", "🔥", "🤘"],
+  "decor": [{"emoji": "🎤", "x": 130, "y": 60, "size": 24}, {"emoji": "🎶", "x": 300, "y": 40, "size": 26}, {"emoji": "⭐", "x": 560, "y": 70, "size": 22},
+            {"emoji": "🎵", "x": 660, "y": 30, "size": 22}, {"emoji": "✨", "x": 800, "y": 100, "size": 20},
+            {"emoji": "🔊", "x": 220, "y": 246, "size": 36}, {"emoji": "🥁", "x": 700, "y": 246, "size": 40}],
+  "rider": SHADOW + '''<rect x="26" y="52" width="9" height="24" rx="3" fill="#222"/><rect x="41" y="52" width="9" height="24" rx="3" fill="#222"/>
+<rect x="24" y="72" width="12" height="6" rx="2" fill="#5D4037"/><rect x="40" y="72" width="12" height="6" rx="2" fill="#5D4037"/>
+<path d="M27 30 h22 l3 24 h-28z" fill="#1C1C24"/><path d="M35 30 h6 v22 h-6z" fill="#E53935"/>
+<line x1="46" y1="50" x2="74" y2="30" stroke="#8B5A2B" stroke-width="4" stroke-linecap="round"/>
+<line x1="47" y1="49" x2="73" y2="30" stroke="#E8DCC0" stroke-width="1"/>
+<rect x="69" y="24" width="9" height="9" rx="2" fill="#222" transform="rotate(-35 73.5 28.5)"/>
+<ellipse cx="44" cy="54" rx="13" ry="9" fill="#E53935" transform="rotate(-20 44 54)"/><circle cx="46" cy="53" r="3" fill="#fff"/><circle cx="41" cy="56" r="1.5" fill="#222"/>
+<path d="M30 36 l26 -6" stroke="#1C1C24" stroke-width="6" stroke-linecap="round"/><circle cx="57" cy="29" r="3.5" fill="#F5D0B0"/>
+<path d="M48 36 l-2 14" stroke="#1C1C24" stroke-width="6" stroke-linecap="round"/><circle cx="46" cy="51" r="3.5" fill="#F5D0B0"/>
+<circle cx="38" cy="20" r="11" fill="#F5D0B0"/>
+<path d="M27 18 l-4 -12 l7 6 l2 -10 l5 7 l4 -9 l3 9 l6 -7 l-1 10 l6 -4 l-4 10z" fill="#2B1B12"/>
+<rect x="29" y="17" width="8" height="5" rx="2" fill="#111"/><rect x="39" y="17" width="8" height="5" rx="2" fill="#111"/><line x1="37" y1="19" x2="39" y2="19" stroke="#111" stroke-width="1.5"/>
+<ellipse cx="39" cy="27" rx="2.5" ry="2" fill="#B3405A"/>'''},
 }
 
 for tid, t in THEMES.items():

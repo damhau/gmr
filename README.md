@@ -7,7 +7,9 @@ the flag is 7h30. Steps are checked off by Flic buttons (webhooks) or by tapping
 ## Layout
 - `app/server.py` — zero-dependency backend (Python stdlib: http.server + sqlite3). Port 8000.
 - `app/static/index.html` — the UI, 800x480, French. Tap a stop = fait, hold 0.7 s = annuler. Live via SSE.
+  The week strip shows Monday to Friday only, and the streak skips weekends (they neither count nor break it).
 - `app/static/report.html` — `/report`: review dashboard (KPIs, finish-time trend, weekly stacks, calendar, per-step and per-weekday stats, journal, CSV export). Inline SVG, no libraries.
+  School days only: Saturdays and Sundays are left out of every stat, chart and the CSV, even if the routine was done.
 - `app/seed_demo.py` — fills a *separate* database with fake mornings to try `/report`: `GMR_DB=/tmp/demo.db python3 app/seed_demo.py --weeks 10`.
 - `app/static/admin.html` — `/admin`: map Flic buttons to steps, set step target times and the goal, simulate presses. LAN only, no auth.
 - `deploy/` — systemd units, kiosk launcher, `install.sh` (run on the Pi).
@@ -46,16 +48,16 @@ Manual: `ssh damien@192.168.68.75 'sudo systemctl start gmr-deploy-now.service; 
 The kid screen is themed. One JSON file per theme in `app/static/themes/` (colours, texts with `{goal}`/`{time}`
 placeholders, station icons, sky, decorations, confetti, and the rider as an SVG fragment in an 80x80 box).
 Shipped: licorne (default), shrek, harry-potter, kpop-demon-hunters, totoro, espace, pirates, dinosaures, sirene,
-pokemon, minecraft. Switch in `/admin` (applies live over SSE), preview any with `/?theme=<id>`.
+pokemon, minecraft, mandalorian (Grogu), vice-versa (Joie), lego, rock-star. Switch in `/admin` (applies live over SSE), preview any with `/?theme=<id>`.
 To add one: edit `app/tools_make_themes.py` (or write the JSON by hand), run it, push. `GET /api/themes` lists them.
 
 ## API
     POST /event          {"task":"wake|clothes|breakfast|teeth","action":"done|undo|skip"}
                          (also accepts ?task=wake&action=done)
     GET  /api/today      today's state
-    GET  /api/week?offset=0
+    GET  /api/week?offset=0      Mon-Fri of that week + current streak (weekends skipped)
     GET  /api/version    running version + deploy log;  POST /api/deploy triggers a check now
-    GET  /api/report?days=56     everything /report shows (max 730 days); /api/report.csv?days=56 for a spreadsheet
+    GET  /api/report?days=56     everything /report shows, Mon-Fri only (max 730 days); /api/report.csv?days=56 for a spreadsheet
     GET  /api/stream     Server-Sent Events: "today" pushed on every change, plus "buttons" and "settings"
     GET  /health
     POST /hub-event      Flic Hub SDK payload (see below)

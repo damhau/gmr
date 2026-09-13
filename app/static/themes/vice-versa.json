@@ -1,0 +1,99 @@
+{
+ "name": "Vice-Versa (Joie)",
+ "emoji": "😄",
+ "colors": {
+  "sky": "#FFF3B0",
+  "dawn": "#FFD6E8",
+  "horizon": "#FFFBEA",
+  "ground": "#7FD8A8",
+  "path": "#FFC3E1",
+  "pathDone": "#FFD23F",
+  "ink": "#3A2E5C",
+  "cloud": "#ffffff",
+  "mist": "#8E7BB0",
+  "accent": "#FF5FA2",
+  "ok": "#1F9E63",
+  "sun": "#FFD23F",
+  "discDone": "#FFF6E0"
+ },
+ "texts": {
+  "title": "Joie t'accompagne à l'école, Romane !",
+  "subtitle": "Quatre souvenirs à créer avant {goal}. Tout en jaune !",
+  "msgs": [
+   "Le Quartier Général se réveille !",
+   "Un souvenir tout doré !",
+   "À mi-chemin, Joie saute partout !",
+   "Le train de la pensée arrive…",
+   "Souvenir essentiel créé ! 🎉"
+  ],
+  "win": "Arrivée à {time}, avant {goal} ! 😄 Une journée en or !",
+  "late": "Arrivée à {time}. Demain, Joie gagne avant {goal} ?"
+ },
+ "icons": {
+  "wake": "🌞",
+  "clothes": "👗",
+  "breakfast": "🥞",
+  "teeth": "🪥"
+ },
+ "sky": {
+  "type": "sun"
+ },
+ "clouds": true,
+ "confetti": [
+  "💛",
+  "💙",
+  "💚",
+  "❤️",
+  "💜"
+ ],
+ "decor": [
+  {
+   "circle": 1,
+   "x": 150,
+   "y": 60,
+   "r": 10,
+   "fill": "#FFD23F"
+  },
+  {
+   "circle": 1,
+   "x": 300,
+   "y": 40,
+   "r": 8,
+   "fill": "#5AA9FF"
+  },
+  {
+   "circle": 1,
+   "x": 450,
+   "y": 80,
+   "r": 9,
+   "fill": "#FF5A5A"
+  },
+  {
+   "circle": 1,
+   "x": 600,
+   "y": 35,
+   "r": 8,
+   "fill": "#7ED957"
+  },
+  {
+   "circle": 1,
+   "x": 760,
+   "y": 75,
+   "r": 9,
+   "fill": "#B57BFF"
+  },
+  {
+   "emoji": "🌈",
+   "x": 700,
+   "y": 246,
+   "size": 50
+  },
+  {
+   "emoji": "🎈",
+   "x": 220,
+   "y": 246,
+   "size": 30
+  }
+ ],
+ "rider": "<ellipse cx=\"38\" cy=\"79\" rx=\"16\" ry=\"4\" fill=\"rgba(0,0,0,.14)\"/><circle cx=\"40\" cy=\"42\" r=\"34\" fill=\"#FFF176\" opacity=\".35\"/>\n<rect x=\"30\" y=\"60\" width=\"7\" height=\"17\" rx=\"3\" fill=\"#FFE082\"/><rect x=\"43\" y=\"60\" width=\"7\" height=\"17\" rx=\"3\" fill=\"#FFE082\"/>\n<path d=\"M30 36 h20 l8 28 h-36z\" fill=\"#7ED957\"/><circle cx=\"38\" cy=\"50\" r=\"1.8\" fill=\"#C8F79A\"/><circle cx=\"47\" cy=\"57\" r=\"1.8\" fill=\"#C8F79A\"/><circle cx=\"33\" cy=\"59\" r=\"1.4\" fill=\"#C8F79A\"/>\n<path d=\"M30 40 l-12 -14\" stroke=\"#FFE082\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M50 40 l12 -14\" stroke=\"#FFE082\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n<circle cx=\"40\" cy=\"24\" r=\"13\" fill=\"#FFE082\"/>\n<path d=\"M27 21 q2 -15 14 -15 q12 0 13 12 q-3 -5 -8 -6 q-2 6 -8 3 q-4 5 -11 6z\" fill=\"#3FA9F5\"/>\n<circle cx=\"35\" cy=\"25\" r=\"2.8\" fill=\"#1E5AA8\"/><circle cx=\"45\" cy=\"25\" r=\"2.8\" fill=\"#1E5AA8\"/><circle cx=\"36\" cy=\"24\" r=\"1\" fill=\"#fff\"/><circle cx=\"46\" cy=\"24\" r=\"1\" fill=\"#fff\"/>\n<path d=\"M34 30 q6 6 12 0\" stroke=\"#C76A2E\" stroke-width=\"1.6\" fill=\"none\" stroke-linecap=\"round\"/>"
+}

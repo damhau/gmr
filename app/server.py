@@ -19,7 +19,8 @@ API:
   GET  /api/themes       themes available in static/themes/*.json (id, name, emoji)
   GET  /admin            configuration page: buttons + step times (LAN only, no auth)
   GET  /api/today
-  GET  /api/week?offset=0
+  GET  /api/week?offset=0        Mon-Fri of that week + streak (weekends are skipped)
+  GET  /api/report?days=56       everything /report shows, Mon-Fri only; /api/report.csv?days=56
   GET  /                 -> static/index.html
   GET  /static/<file>
 """
@@ -353,11 +354,12 @@ def analyse_day(d: date, rows: list, goal: str, targets: dict) -> dict:
 
 
 def period_stats(days: list, goal: str, targets: dict) -> dict:
+    """days: analyse_day() results for the school days (Mon-Fri) of a period, in order."""
     active = [x for x in days if x["active"]]
     complete = [x for x in active if x["complete"]]
     on_time = [x for x in complete if x["on_time"]]
     fin = [_min(x["finished_at"]) for x in complete]
-    # streaks over calendar days (a day without routine breaks the streak)
+    # longest run of complete school days (a school day without routine breaks it)
     best = cur = 0
     for x in days:
         cur = cur + 1 if x["complete"] else 0
@@ -385,7 +387,7 @@ def period_stats(days: list, goal: str, targets: dict) -> dict:
             "avg_gap_min": round(_avg(gaps)) if gaps else None,
         }
     weekdays = []
-    for wd in range(7):
+    for wd in range(5):
         xs = [x for x in active if x["weekday"] == wd]
         cs = [x for x in xs if x["complete"]]
         weekdays.append({"weekday": wd, "active": len(xs), "complete": len(cs),
@@ -393,11 +395,10 @@ def period_stats(days: list, goal: str, targets: dict) -> dict:
                          "completion_rate": _rate(len(cs), len(xs)),
                          "on_time_rate": _rate(sum(1 for x in cs if x["on_time"]), len(xs)),
                          "avg_finish": _hhmm(_avg([_min(x["finished_at"]) for x in cs]))})
-    school_days = [x for x in days if x["weekday"] < 5]
     return {
         "days_total": len(days), "active_days": len(active), "complete_days": len(complete),
         "on_time_days": len(on_time), "incomplete_days": len(active) - len(complete),
-        "missed_weekdays": sum(1 for x in school_days if not x["active"]),
+        "missed_weekdays": sum(1 for x in days if not x["active"]),
         "completion_rate": _rate(len(complete), len(active)),
         "on_time_rate": _rate(len(on_time), len(active)),
         "avg_finish": _hhmm(_avg(fin)), "median_finish": _hhmm(_median(fin)),
@@ -412,6 +413,8 @@ def period_stats(days: list, goal: str, targets: dict) -> dict:
 
 
 def api_report(days_back: int = 56) -> dict:
+    """Everything /report shows. Saturdays and Sundays are not part of the game: they are left out of
+    `days` (and so of every stat, chart and the CSV) even if the routine was done on a weekend."""
     cfg = settings()
     goal, targets = cfg["goal"], cfg["targets"]
     days_back = max(7, min(730, days_back))
@@ -421,17 +424,11 @@ def api_report(days_back: int = 56) -> dict:
     with db() as con:
         rows = day_rows(con, prev_start, today_)
         first = con.execute("SELECT MIN(day) AS d, COUNT(*) AS n FROM events").fetchone()
-        # current streak needs to look past the window
-        streak, d = 0, today_
-        if not summarize(day_status(con, d), goal)["complete"]:
-            d -= timedelta(days=1)
-        while summarize(day_status(con, d), goal)["complete"]:
-            streak += 1
-            d -= timedelta(days=1)
-    cur = [analyse_day(start + timedelta(days=i), rows.get((start + timedelta(days=i)).isoformat(), []), goal, targets)
-           for i in range(days_back)]
-    prev = [analyse_day(prev_start + timedelta(days=i), rows.get((prev_start + timedelta(days=i)).isoformat(), []), goal, targets)
-            for i in range(days_back)]
+        streak = current_streak(con, goal, today_)  # needs to look past the window
+    def school_days(first: date) -> list:
+        ds = [first + timedelta(days=i) for i in range(days_back)]
+        return [analyse_day(d, rows.get(d.isoformat(), []), goal, targets) for d in ds if d.weekday() < 5]
+    cur, prev = school_days(start), school_days(prev_start)
     weeks = {}
     for x in cur:
         d = date.fromisoformat(x["day"])
@@ -499,6 +496,28 @@ def summarize(st: dict, goal: str = None) -> dict:
             "on_time": bool(finished and finished <= goal)}
 
 
+def prev_school_day(d: date) -> date:
+    """The school day (Mon-Fri) before d: weekends are not part of the game."""
+    d -= timedelta(days=1)
+    while d.weekday() >= 5:
+        d -= timedelta(days=1)
+    return d
+
+
+def current_streak(con, goal: str, today_: date) -> int:
+    """Consecutive complete school days ending today (or on the last school day if today isn't done yet).
+    Saturdays and Sundays neither count nor break the streak."""
+    def complete(d):
+        return summarize(day_status(con, d), goal)["complete"]
+    streak, d = 0, today_
+    if d.weekday() >= 5 or not complete(d):
+        d = prev_school_day(d)
+    while complete(d):
+        streak += 1
+        d = prev_school_day(d)
+    return streak
+
+
 def api_today() -> dict:
     cfg = settings()
     with db() as con:
@@ -513,19 +532,13 @@ def api_week(offset: int = 0) -> dict:
         today_ = now().date()
         monday = today_ - timedelta(days=today_.weekday()) + timedelta(weeks=offset)
         days = []
-        for i in range(7):
+        for i in range(5):  # Mon-Fri only: weekends are not part of the game
             d = monday + timedelta(days=i)
             days.append({"day": d.isoformat(), "weekday": d.weekday(),
                          "today": d == today_, "future": d > today_,
                          **summarize(day_status(con, d), goal)})
-        # streak: consecutive complete days ending today (or yesterday if today isn't done yet)
-        streak, d = 0, today_
-        if not summarize(day_status(con, d), goal)["complete"]:
-            d -= timedelta(days=1)
-        while summarize(day_status(con, d), goal)["complete"]:
-            streak += 1
-            d -= timedelta(days=1)
-        return {"week_of": monday.isoformat(), "goal": goal, "days": days, "streak": streak}
+        return {"week_of": monday.isoformat(), "goal": goal, "days": days,
+                "streak": current_streak(con, goal, today_)}
 
 
 class Handler(BaseHTTPRequestHandler):
