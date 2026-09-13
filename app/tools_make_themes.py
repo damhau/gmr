@@ -240,11 +240,12 @@ THEMES = {
   "rider": SHADOW + '''<ellipse cx="40" cy="74" rx="18" ry="3.5" fill="#8FE39A" opacity=".5"/>
 <ellipse cx="40" cy="58" rx="28" ry="17" fill="#8A9199"/>
 <path d="M22 60 q18 -14 36 0 v6 h-36z" fill="#8B6A4A"/>
-<path d="M28 34 l-23 -7 q-2 7 4 9 l19 2z" fill="#8DBF7A"/><path d="M52 34 l23 -7 q2 7 -4 9 l-19 2z" fill="#8DBF7A"/>
+<path d="M29 33 C 19 27, 6 29, 2 39 C 1 43, 5 46, 10 45 C 16 44, 22 45, 29 45 Z" fill="#8DBF7A"/><path d="M27 36 C 19 32, 10 34, 7 40 C 7 43, 11 44, 15 43 C 20 42, 24 43, 27 43 Z" fill="#C4DEA8"/>
+<path d="M51 33 C 61 27, 74 29, 78 39 C 79 43, 75 46, 70 45 C 64 44, 58 45, 51 45 Z" fill="#8DBF7A"/><path d="M53 36 C 61 32, 70 34, 73 40 C 73 43, 69 44, 65 43 C 60 42, 56 43, 53 43 Z" fill="#C4DEA8"/>
 <ellipse cx="40" cy="40" rx="14" ry="12" fill="#8DBF7A"/>
 <circle cx="34" cy="41" r="4.5" fill="#111"/><circle cx="47" cy="41" r="4.5" fill="#111"/><circle cx="35.5" cy="39.5" r="1.4" fill="#fff"/><circle cx="48.5" cy="39.5" r="1.4" fill="#fff"/>
 <path d="M37 49 q3 2 6 0" stroke="#3E5E2E" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-<path d="M36 29 q1 -5 3 -3 M41 28 q1 -4 3 -2" stroke="#E3EBD0" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+<path d="M36 29 q0 -4 2 -4 M40 28 q0 -4 2 -4 M44 29 q0 -4 2 -3" stroke="#D7E3BF" stroke-width="1" fill="none" stroke-linecap="round"/>
 <path d="M12 58 a28 17 0 0 0 56 0z" fill="#C4CAD2"/><path d="M15 63 q25 8 50 0" stroke="#9AA1AB" stroke-width="2" fill="none"/>'''},
 
 "vice-versa": {
@@ -284,7 +285,7 @@ THEMES = {
   "rider": SHADOW + '''<rect x="24" y="50" width="32" height="6" fill="#1E64C8"/><rect x="24" y="54" width="14" height="22" fill="#1E64C8"/><rect x="42" y="54" width="14" height="22" fill="#1E64C8"/>
 <rect x="22" y="72" width="16" height="5" fill="#174E9C"/><rect x="42" y="72" width="16" height="5" fill="#174E9C"/>
 <path d="M26 28 h28 l4 24 h-36z" fill="#E3000B"/><rect x="34" y="34" width="12" height="12" fill="#FFD500"/><rect x="37" y="37" width="6" height="6" fill="#E3000B"/>
-<path d="M26 31 l-8 17" stroke="#E3000B" stroke-width="8" stroke-linecap="round"/><path d="M54 31 l8 17" stroke="#E3000B" stroke-width="8" stroke-linecap="round"/>
+<path d="M30 33 l-12 15" stroke="#E3000B" stroke-width="8" stroke-linecap="round"/><path d="M50 33 l12 15" stroke="#E3000B" stroke-width="8" stroke-linecap="round"/>
 <circle cx="17" cy="50" r="4.5" fill="#FFD500"/><circle cx="63" cy="50" r="4.5" fill="#FFD500"/>
 <rect x="36" y="24" width="8" height="5" fill="#FFD500"/>
 <rect x="29" y="6" width="22" height="20" rx="5" fill="#FFD500"/><rect x="35" y="1" width="10" height="6" rx="1" fill="#FFD500"/>
